@@ -128,6 +128,10 @@ if ($requestUri === '/MyWebsite/Assessment 3/index.php' || $requestUri === '/MyW
         $sellerController = new SellerController($context);
         $sellerController->handleAddSaleItem();
 
+    } elseif ($requestUri === '/MyWebsite/Assessment%203/index.php/listings') {
+        $sellerController = new SellerController($context);
+        $sellerController->getListings();
+
 } else {
     // Handle 404 error or redirect to home
     http_response_code(404);

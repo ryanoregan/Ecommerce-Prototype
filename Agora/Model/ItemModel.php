@@ -9,6 +9,7 @@ class ItemModel
     private string $description;
     private float $price;
     private int $sellerID;
+    private ?string $imagePath;
 
     // Constructor to initialize the properties
     public function __construct(int $itemID, string $itemName, string $description, float $price, int $sellerID, ?string $imagePath = null)
@@ -45,6 +46,11 @@ class ItemModel
         return $this->price;
     }
 
+    public function getImagePath(): ?string
+    {
+        return $this->imagePath;
+    }
+
     // Getter for sellerID
     public function getSellerID(): int
     {
@@ -70,5 +76,27 @@ class ItemModel
             }
         
             return true; // Return true on successful insertion
+        }
+        public function getItemsBySellerID($db, $sellerID)
+        {
+            $sql = "SELECT * FROM Items WHERE SellerID = ?";
+            $fields = [$sellerID];
+        
+            // Log the SQL query and parameters
+            error_log("Executing query: " . $sql . " with parameters: " . json_encode($fields));
+        
+            // Make sure to return an empty array if the execution fails
+            $result = $db->queryPrepared($sql, $fields);
+        
+            // Check if $result is false
+            if ($result === false) {
+                error_log("Failed to retrieve items for seller ID: " . $sellerID);
+                return []; // Return an empty array on failure
+            }
+        
+            // Log the retrieved results
+            error_log("Retrieved items: " . print_r($result, true));
+        
+            return $result; // Return the result set
         }
 }

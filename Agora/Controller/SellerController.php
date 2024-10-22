@@ -95,4 +95,59 @@ class SellerController extends AbstractController
             }
         }
     }
+
+    public function getListings()
+    {
+        // Check if the user is logged in
+        $user = $this->context->getUser();
+        if ($user === null) {
+            echo "<script>alert('You must be logged in to view your listings.'); window.history.back();</script>";
+            return;
+        }
+    
+        // Get the current seller's ID
+        $sellerID = $user->getUserID();
+    
+        try {
+            // Access the database through Context
+            $db = $this->context->getDB();
+            if (!$db->isConnected()) {
+                error_log("Database connection is not established.");
+                return false;
+            }
+    
+            // Fetch all listings for the current seller
+            // Assuming `getItemsBySellerID` returns an array of associative arrays
+            $itemModel = new ItemModel(0, '', '', 0.0, 0); // Placeholder constructor to access method
+            $listingsData = $itemModel->getItemsBySellerID($db, $sellerID); // Fetch items
+    
+            // Convert fetched data into `ItemModel` objects
+            $listings = [];
+            foreach ($listingsData as $itemData) {
+                $listings[] = new ItemModel(
+                    $itemData['ItemID'],
+                    $itemData['ItemName'],
+                    $itemData['Description'],
+                    (float)$itemData['Price'],
+                    $itemData['SellerID'],
+                    $itemData['ImagePath'] ?? null // Assuming ImagePath is optional
+                );
+            }
+    
+            // Render the listings page with the fetched listings
+            $sellerView = new SellerView();
+            $sellerView->setTemplate('./html/listings.html'); // Adjust path to the listings template
+    
+            // Pass the listings to the view (assuming SellerView has a method for this)
+            $sellerView->setListings($listings); // Assuming you will implement this in the view
+
+    
+            echo $sellerView->render();
+    
+        } catch (\Exception $e) {
+            // Handle exceptions during the retrieval of listings
+            echo 'Error: ' . htmlspecialchars($e->getMessage());
+        }
+    }
+    
 }

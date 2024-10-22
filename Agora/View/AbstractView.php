@@ -38,6 +38,10 @@ abstract class AbstractView
     {
         $this->fields[$name] = $value;
     }
+    public function getTemplateField(string $key)
+    {
+        return $this->templateFields[$key] ?? null; // Return null if the key doesn't exist
+    }
 
     // Method to set multiple template fields
     public function setTemplateFields(array $fields): void

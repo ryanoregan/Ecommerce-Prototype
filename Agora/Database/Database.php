@@ -103,7 +103,9 @@ class Database implements IDatabase
 
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result;
+        
+        // Fetch all results as an associative array
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : null; // Return results or null if no results
     }
 
     // Method to execute a prepared query that modifies data
