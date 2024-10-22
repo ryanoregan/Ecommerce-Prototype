@@ -13,6 +13,12 @@ abstract class AbstractController
     public function __construct(IContext $context)
     {
         $this->context = $context;
+                // Ensure the user is set in the context from the session
+                $loggedInUser = $this->context->getSession()->get('loggedInUser');
+                if ($loggedInUser !== null) {
+                    // Set the user in the context
+                    $this->context->setUser($loggedInUser);
+                }
     }
 
     // Protected method to get the context

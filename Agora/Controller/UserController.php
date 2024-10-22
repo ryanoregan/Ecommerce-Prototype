@@ -9,6 +9,7 @@ use Agora\Model\UserModel; // Assuming you have a UserModel for user data
 use Agora\View\LoginView; // Assuming you have a LoginView for rendering the login form
 use Agora\View\SignUpView; // Assuming you have a SignUpView for rendering the signup form
 use Agora\View\BuyerView;
+use Agora\View\SellerView;
 
 class UserController extends AbstractController
 {
@@ -60,24 +61,24 @@ class UserController extends AbstractController
                 // Login successful
                 $this->context->setUser($userModel); // Store user in Context
                 $this->context->getSession()->set('loggedInUser', $userModel); // Store user in session
-                
+                header("Location: ./index.php/dashboard");
                     // Redirect user based on their role
-                    switch ($userModel->getRole()) {
-                        case 'Buyer':
-                            header("Location: ./index.php/dashboard");
-                            break;
-                        case 'Seller':
-                            header("Location: ./index.php");
-                            break;
-                        case 'Master Admin':
-                            header("Location: /admin_dashboard");
-                            break;
-                        case 'Business Account Administrator':
-                            header("Location: /business_dashboard");
-                            break;
-                        default:
-                            header("Location: /homepage"); // Fallback if role is not matched
-                    }
+                    // switch ($userModel->getRole()) {
+                    //     case 'Buyer':
+                    //         header("Location: ./index.php/dashboard");
+                    //         break;
+                    //     case 'Seller':
+                    //         header("Location: ./index.php");
+                    //         break;
+                    //     case 'Master Admin':
+                    //         header("Location: /admin_dashboard");
+                    //         break;
+                    //     case 'Business Account Administrator':
+                    //         header("Location: /business_dashboard");
+                    //         break;
+                    //     default:
+                    //         header("Location: /homepage"); // Fallback if role is not matched
+                    // }
                 exit();
             } else {
                 // Password did not match
@@ -177,6 +178,7 @@ class UserController extends AbstractController
     try {
         $buyerView = new BuyerView(); // Create an instance of BuyerView
         $buyerView->setTemplate('./html/buyer.html'); // Set the template path
+        $buyerView->setTemplateField('username', $this->context->getUser()); 
 
         // Optionally set an error message
         if ($errorMessage) {
@@ -184,6 +186,25 @@ class UserController extends AbstractController
         }
 
         echo $buyerView->render(); // Render the view
+    } catch (\Exception $e) {
+        // Handle exceptions during rendering
+        echo 'Error: ' . htmlspecialchars($e->getMessage());
+    }
+}
+
+public function renderSellerView($errorMessage = null)
+{
+    try {
+        $sellerView = new SellerView(); // Create an instance of SellerView
+        $sellerView->setTemplate('./html/seller.html'); // Set the template path
+        $sellerView->setTemplateField('username', $this->context->getUser()); 
+
+        // Optionally set an error message
+        if ($errorMessage) {
+            $sellerView->setTemplateField('errorMessage', $errorMessage);
+        }
+
+        echo $sellerView->render(); // Render the view
     } catch (\Exception $e) {
         // Handle exceptions during rendering
         echo 'Error: ' . htmlspecialchars($e->getMessage());

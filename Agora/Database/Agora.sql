@@ -70,6 +70,7 @@ ItemName VARCHAR(20) NOT NULL,
 Description VARCHAR(100) NOT NULL,
 Price DECIMAL(5, 2),
 SellerID INT NOT NULL,
+ImagePath VARCHAR(255) NULL,
 FOREIGN KEY (SellerID) REFERENCES Sellers(UserID),
 PRIMARY KEY (ItemID)
 ) engine = InnoDB;

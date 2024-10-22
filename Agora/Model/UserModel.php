@@ -86,6 +86,38 @@ class UserModel
             error_log("User creation failed for username: $username, email: $email");
             return false;
         }
+
+            // Get the newly inserted UserID
+    $userId = $db->getInsertId();
+
+    // Insert into the appropriate role table based on the user's role
+    switch ($this->role) {
+        case 'Buyer':
+            $sqlRole = "INSERT INTO Buyers (UserID) VALUES (?)";
+            break;
+        case 'Seller':
+            $sqlRole = "INSERT INTO Sellers (UserID, Location) VALUES (?, 'Default Location')";
+            break;
+        case 'Business Account Administrator':
+            $sqlRole = "INSERT INTO BusinessAccountAdministrators (UserID, HQLocation, LegalBusinessDetails) VALUES (?, 'Default HQ', 'Default Legal Details')";
+            break;
+        case 'Master Admin':
+            $sqlRole = "INSERT INTO MasterAdmin (UserID) VALUES (?)";
+            break;
+        default:
+            error_log("Role assignment failed for username: $username, invalid role: {$this->role}");
+            return false;
+    }
+
+    // Debugging: Log the SQL and parameters for role table
+    error_log("Executing SQL for role: $sqlRole");
+    error_log("Parameters: UserID=$userId");
+
+    // Execute the prepared statement for role table
+    if (!$db->executePrepared($sqlRole, [$userId])) {
+        error_log("Role assignment failed for username: $username, UserID: $userId");
+        return false;
+    }
     
         echo "<script>alert('User created successfully: username=$username, email=$email');</script>"; // Log success
         return true;

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sell - Agora</title>
-  <link href="./output.css" rel="stylesheet">
+  <link href="../html/output.css" rel="stylesheet">
   <style>
     .uploaded-image {
       max-width: 100%;
@@ -20,13 +20,13 @@
   <header class="bg-blue-500 text-white py-4">
     <div class="container mx-auto flex justify-between items-center">
       <h1 class="text-2xl font-bold">Agora</h1>
-      <p>Welcome, James Kennedy!</p>
+      <p>Welcome, <?= htmlspecialchars($username->getUsername()) ?>!</p>
       <nav class="flex space-x-4">
         <a href="#" class="hover:underline">Sell</a>
         <a href="#" class="hover:underline">My Listings</a>
         <a href="#" class="hover:underline">Groups Beta</a>
         <a href="#" class="hover:underline">Profile</a>
-        <a href="#" class="hover:underline">Logout</a>
+        <a href="/MyWebsite/Assessment%203/index.php/logout" class="hover:underline">Logout</a>
       </nav>
     </div>
   </header>
@@ -34,41 +34,40 @@
     <h2 class="text-3xl font-bold mb-8 text-center">Sell a new product</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <div class="col-span-1">
-        <form class="bg-white shadow-md rounded-lg p-8 h-full">
+        <form class="bg-white shadow-md rounded-lg p-8 h-full" method="POST" action="/MyWebsite/Assessment%203/index.php/addSaleItem" enctype="multipart/form-data">
           <div class="mb-8">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="item_name">
               Title
             </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" placeholder="Placeholder">
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="item_name" name="item_name" type="text" placeholder="Enter product title" required>
           </div>
           <div class="mb-8 flex-grow">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="item_description">
               Description
             </label>
-            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-64" id="description" placeholder="Placeholder"></textarea>
+            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-64" id="item_description" name="item_description" placeholder="Enter product description" required></textarea>
           </div>
-        </form>
       </div>
       <div class="col-span-2">
-        <form class="bg-white shadow-md rounded-lg p-8 h-full">
+        <form class="bg-white shadow-md rounded-lg p-8 h-full" method="POST" action="/MyWebsite/Assessment%203/index.php/addSaleItem" enctype="multipart/form-data">
           <div class="mb-8">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="image">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="item_image">
               Add an image
             </label>
-            <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="document.getElementById('image').click();">
+            <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="document.getElementById('item_image').click();">
               Browse
             </button>
-            <input class="hidden-input" id="image" type="file" onchange="displayImage(event)">
+            <input class="hidden-input" id="item_image" name="item_image" type="file" onchange="displayImage(event)">
             <img id="uploadedImage" class="uploaded-image hidden">
           </div>
           <div class="mb-8">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="amount">
-              Amount
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="item_price">
+              Price
             </label>
-            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="amount" type="text" placeholder="00.00">
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="item_price" name="item_price" type="text" placeholder="Enter price (e.g. 00.00)" required>
           </div>
           <div class="flex items-center justify-between">
-            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+            <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" onclick="window.history.back();">
               Cancel
             </button>
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
@@ -91,5 +90,22 @@
       image.classList.remove('hidden');
     }
   </script>
+  <script>
+    function displayImage(event) {
+        const uploadedImage = document.getElementById('uploadedImage');
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedImage.src = e.target.result;
+                uploadedImage.classList.remove('hidden'); // Show the image
+            }
+            reader.readAsDataURL(file); // Convert to base64 string
+        } else {
+            uploadedImage.classList.add('hidden'); // Hide image if no file selected
+        }
+    }
+</script>
 </body>
 </html>
