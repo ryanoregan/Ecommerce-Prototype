@@ -117,6 +117,7 @@ if ($requestUri === '/MyWebsite/Assessment 3/index.php' || $requestUri === '/MyW
                 echo "Invalid user role!";
                 break;
         }
+
     }
     } else {
         // If no user is logged in, redirect to login page
@@ -131,8 +132,13 @@ if ($requestUri === '/MyWebsite/Assessment 3/index.php' || $requestUri === '/MyW
     } elseif ($requestUri === '/MyWebsite/Assessment%203/index.php/listings') {
         $sellerController = new SellerController($context);
         $sellerController->getListings();
+        
+    } elseif ($requestUri === '/MyWebsite/Assessment%203/index.php/profile') {
+        $sellerController = new SellerController($context);
+        $sellerController->getProfile();
+    }
 
-} else {
+else {
     // Handle 404 error or redirect to home
     http_response_code(404);
     echo '404 Not Found';

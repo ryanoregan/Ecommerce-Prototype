@@ -4,6 +4,7 @@ namespace Agora\Controller;
 
 use Agora\Database\IContext;
 use Agora\Model\ItemModel; // Use ItemModel to represent the item being sold
+use Agora\Model\UserModel;
 use Agora\View\SellerView; // Assuming you have a SellerView to render seller-related pages
 
 class SellerController extends AbstractController
@@ -88,7 +89,7 @@ class SellerController extends AbstractController
             // Render the add item form if not a POST request
             try {
                 $sellerView = new SellerView();
-                $sellerView->setTemplate('./html/add_item.html'); // Adjust path to the add item template
+                $sellerView->setTemplate('./html/seller.html'); // Adjust path to the add item template
                 echo $sellerView->render();
             } catch (\Exception $e) {
                 echo 'Error: ' . htmlspecialchars($e->getMessage());
@@ -150,4 +151,60 @@ class SellerController extends AbstractController
         }
     }
     
+    public function getProfile()
+    {
+        // Check if the user is logged in
+        $user = $this->context->getUser();
+        if ($user === null) {
+            echo "<script>alert('You must be logged in to view your listings.'); window.history.back();</script>";
+            return;
+        }
+    
+        // Get the current seller's ID
+        $sellerID = $user->getUserID();
+    
+        try {
+            // Access the database through Context
+            $db = $this->context->getDB();
+            if (!$db->isConnected()) {
+                error_log("Database connection is not established.");
+                return false;
+            }
+    
+            // Fetch all listings for the current seller
+            // Assuming `getItemsBySellerID` returns an array of associative arrays
+            $userModel = new UserModel(0, '', '', 0.0, 0); // Placeholder constructor to access method
+            $profileData = $userModel->getProfilebyUserID($db, $sellerID); // Fetch items
+    
+        // Check if profileData is an array and contains data
+        if (!is_array($profileData) || empty($profileData)) {
+            throw new \Exception("No profile data found for user ID: $sellerID.");
+        }
+
+        var_dump($profileData); // Check what you get here
+        var_dump($profileData[0]['UserID']); // Debug output
+        // Create UserModel instance with the fetched data
+        $Profile[] = new UserModel(
+            $profileData[0]['UserID'],
+            $profileData[0]['UserName'],
+            $profileData[0]['Email'],
+            $profileData[0]['Password'],
+            $profileData[0]['Role']
+        );
+
+        // Render the profile page
+        $sellerView = new SellerView();
+        $sellerView->setTemplate('./html/SellerProfile.html');
+
+        // Pass the user profile to the view
+        $sellerView->setProfile($Profile); // Assuming you will implement this in the view
+
+        echo $sellerView->render();
+
+    } catch (\Exception $e) {
+        // Handle exceptions during the retrieval of profile data
+        echo 'Error: ' . htmlspecialchars($e->getMessage());
+    }
+}
+
 }

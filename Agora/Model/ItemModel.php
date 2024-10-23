@@ -50,6 +50,7 @@ class ItemModel
     {
         return $this->imagePath;
     }
+    
 
     // Getter for sellerID
     public function getSellerID(): int

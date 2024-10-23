@@ -23,6 +23,7 @@ class SellerModel
     {
         $this->location = $newLocation;
     }
+    
 
     // Method to add an item for sale
     public function addSaleItem(string $itemName, string $description, float $price, int $quantity): bool

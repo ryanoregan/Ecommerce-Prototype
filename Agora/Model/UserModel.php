@@ -44,6 +44,11 @@ class UserModel
         return $this->password;
     }
 
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
     // Method to hash the user's password (assuming you're using bcrypt for hashing)
     public function passwordHash(): string
     {
@@ -121,5 +126,28 @@ class UserModel
     
         echo "<script>alert('User created successfully: username=$username, email=$email');</script>"; // Log success
         return true;
+    }
+
+    public function getProfileByUserID($db, $userID)
+    {
+            $sql = "SELECT * FROM Users WHERE userID = ?";
+            $fields = [$userID];
+        
+            // Log the SQL query and parameters
+            error_log("Executing query: " . $sql . " with parameters: " . json_encode($fields));
+        
+            // Make sure to return an empty array if the execution fails
+            $result = $db->queryPrepared($sql, $fields);
+        
+            // Check if $result is false
+            if ($result === false) {
+                error_log("Failed to retrieve items for seller ID: " . $sellerID);
+                return []; // Return an empty array on failure
+            }
+        
+            // Log the retrieved results
+            error_log("Retrieved items: " . print_r($result, true));
+        
+            return $result; // Return the result set
     }
 }
