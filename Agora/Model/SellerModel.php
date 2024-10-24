@@ -19,10 +19,33 @@ class SellerModel
     }
 
     // Method to update the seller's location
-    public function updateLocation(string $newLocation): void
+    public function updateLocation($db, $userID, $newLocation)
     {
-        $this->location = $newLocation;
+        $sql = "UPDATE Sellers SET Location = ? WHERE UserID = ?";
+
+        $fields = [$newLocation, $userID]; // Include userID in fields array
+    
+        // Log the SQL query and parameters
+        error_log("Executing query: " . $sql . " with parameters: " . json_encode($fields));
+    
+        // Execute the prepared statement
+        $result = $db->queryPrepared($sql, $fields);
+        
+        // Check if the query execution was successful
+        if ($result === false) {
+            error_log("Failed to update username for user ID: " . $userID);
+            return false; // Return false on failure
+        }
+    
+        // Log success message
+        error_log("Successfully updated username for user ID: " . $userID);
+        
+        return true; // Return true to indicate success
+
     }
+
+
+
     
 
     // Method to add an item for sale

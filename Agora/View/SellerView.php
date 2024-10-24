@@ -74,20 +74,78 @@ class SellerView extends AbstractView
     
         // Assuming $this->Profile is an array of UserModel instances
         foreach ($this->Profile as $user) { // Use $user to refer to each instance
-            $output .= "<tr class='border-b'>";
-            $output .= "<td class='px-4 py-2'>" . htmlspecialchars($user->getUserID() ?? 'No User ID') . "</td>";
-            $output .= "<td class='px-4 py-2'>" . htmlspecialchars($user->getUserName() ?? 'No Username') . "</td>";
-            $output .= "<td class='px-4 py-2'>" . htmlspecialchars($user->getEmail() ?? 'No Email') . "</td>";
-            $output .= "<td class='px-4 py-2'>" . htmlspecialchars($user->getRole() ?? 'No Role') . "</td>";
-            $output .= "<td class='px-4 py-2'>" . htmlspecialchars($this->location ?? 'No Location') . "</td>";
-            $output .= "<td class='px-4 py-2'>";
-            $output .= "<button class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg'>Edit</button>";
-            $output .= "<button class='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg ml-2'>Delete</button>";
-            $output .= "</td></tr>";
+            $output .= "<div class='bg-white shadow-md rounded-lg p-4 mb-4'>";
+            $output .= "<h2 class='text-xl font-bold mb-2'>Profile Information</h2>";
+            $output .= "<div class='grid grid-cols-1 md:grid-cols-2 gap-4'>"; // Responsive grid layout
+    
+            $output .= "<div class='p-4 border rounded-lg'><strong>User ID:</strong> " . htmlspecialchars($user->getUserID() ?? 'No User ID') . "</div>";
+            $output .= "<div class='p-4 border rounded-lg'><strong>Username:</strong> " . htmlspecialchars($user->getUserName() ?? 'No Username') . "</div>";
+            $output .= "<div class='p-4 border rounded-lg'><strong>Email:</strong> " . htmlspecialchars($user->getEmail() ?? 'No Email') . "</div>";
+            $output .= "<div class='p-4 border rounded-lg'><strong>Role:</strong> " . htmlspecialchars($user->getRole() ?? 'No Role') . "</div>";
+            $output .= "<div class='p-4 border rounded-lg'><strong>Location:</strong> " . htmlspecialchars($this->location ?? 'No Location') . "</div>";
+    
+            $output .= "</div>"; // Close grid
+            $output .= "<div class='flex justify-end mt-4'>";
+            $output .= "<div class='flex justify-end mt-4'>";
+            $output .= "<a href='http://localhost/MyWebsite/Assessment%203/index.php/profile?action=edit&userID=" . htmlspecialchars($user->getUserID()) . "' class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg'>Edit</a>";
+            $output .= "</div>"; // Close flex
+            $output .= "</div>"; // Close flex
+            $output .= "</div>"; // Close card
         }
     
         return $output; // Return the accumulated output for rendering
     }
     
+    // Example form rendering function (could be in a view or another method)
+    public function renderEditForm()
+    {
+
+        foreach ($this->Profile as $user) {
+        // Start form HTML with a card-like layout
+        $output = "<div class='bg-white shadow-md rounded-lg p-4 mb-4'>";
+        $output .= "<h2 class='text-xl font-bold mb-2'>Edit Profile</h2>";
+        $output .= "<form method='POST' action='/MyWebsite/Assessment%203/index.php/submitEdit'>"; // Assuming the form action points to the update profile method
     
+        // Populate fields with current user data, each in a styled container
+        $output .= "<div class='grid grid-cols-1 md:grid-cols-2 gap-4'>"; // Responsive grid layout
+    
+        $output .= "<div class='p-4 border rounded-lg'>";
+        $output .= '<label for="username" class="block font-medium mb-1">Username:</label>';
+        $output .= '<input type="text" name="username" value="' . htmlspecialchars($user->getUserName()) . '" required class="border rounded-lg p-2 w-full">';
+        $output .= "</div>"; // Close container for username
+    
+        $output .= "<div class='p-4 border rounded-lg'>";
+        $output .= '<label for="email" class="block font-medium mb-1">Email:</label>';
+        $output .= '<input type="email" name="email" value="' . htmlspecialchars($user->getEmail()) . '" required class="border rounded-lg p-2 w-full">';
+        $output .= "</div>"; // Close container for email
+    
+        $output .= "<div class='p-4 border rounded-lg'>";
+        $output .= '<label for="password" class="block font-medium mb-1">Password:</label>';
+        $output .= '<input type="password" name="password" placeholder="Enter new password (optional)" class="border rounded-lg p-2 w-full">';
+        $output .= "</div>"; // Close container for password
+    
+        $output .= "<div class='p-4 border rounded-lg'>";
+        $output .= '<label for="location" class="block font-medium mb-1">Location:</label>';
+        $output .= '<input type="text" name="location" value="' . htmlspecialchars($this->location) . '" required class="border rounded-lg p-2 w-full">';
+        $output .= "</div>"; // Close container for location
+    
+        // Hidden input to pass the user ID
+        $output .= '<input type="hidden" name="userID" value="' . htmlspecialchars($user->getUserID()) . '">';
+    
+        $output .= "</div>"; // Close grid
+        // Submit button
+        $output .= '<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-4">Save Changes</button>';
+
+
+        
+        
+        $output .= '</form>';
+        $output .= '<button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-4"onclick="window.history.back()">Cancel</button>';
+        $output .= '</div>'; // Close card
+    
+        // Echo the form
+        echo $output;
+    }
+}
+
 }

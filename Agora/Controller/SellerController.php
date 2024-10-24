@@ -198,20 +198,70 @@ class SellerController extends AbstractController
         $location = $sellerModel->getLocationByUserID($db, $sellerID); // Fetch location
 
 
-        // Render the profile page
-        $sellerView = new SellerView();
-        $sellerView->setTemplate('./html/SellerProfile.html');
-
-// Pass the user profile and location to the view
-$sellerView->setProfile(['user' => $Profile, 'location' => $location]); // Pass associative array
-
-
-        echo $sellerView->render();
+        // Check if the user is attempting to edit the profile
+        if (isset($_GET['action']) && $_GET['action'] === 'edit') {
+            // Render the edit form with the existing user and location data
+            // If no edit action, just render the profile page
+            $sellerView = new SellerView();
+            $sellerView->setTemplate('./html/SellerProfile.html');
+            $sellerView->setProfile(['user' => $Profile, 'location' => $location]); // Pass associative array
+            echo $sellerView->render();
+            
+        } else {
+            // If no edit action, just render the profile page
+            $sellerView = new SellerView();
+            $sellerView->setTemplate('./html/SellerProfile.html');
+            $sellerView->setProfile(['user' => $Profile, 'location' => $location]); // Pass associative array
+            echo $sellerView->render();
+        }
 
     } catch (\Exception $e) {
         // Handle exceptions during the retrieval of profile data
         echo 'Error: ' . htmlspecialchars($e->getMessage());
     }
+}
+public function submitEdit()
+{
+
+    $db = $this->context->getDB();
+    if (!$db->isConnected()) {
+        error_log("Database connection is not established.");
+        return false;
+    }
+    // Check if request is POST for form submission
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $userID = $_POST['userID'] ?? null;
+
+        if ($userID) {
+            // Retrieve posted data
+            $newUserName = $_POST['username'] ?? null;
+            $newEmail = $_POST['email'] ?? null;
+            $newPassword = $_POST['password'] ?? null;
+            $newLocation = $_POST['location'] ?? null;
+
+            // Update user details
+            $userModel = new userModel(0, '', '', 0.0, 0);
+            if ($newUserName) {
+                $userModel->updateUserName($db, $userID, $newUserName);
+            }
+            if ($newEmail) {
+                $userModel->updateEmail($db, $userID, $newEmail);
+            }
+            if ($newPassword) {
+                $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+                $userModel->updatePassword($db, $userID, $hashedPassword);
+            }
+            if ($newLocation) {
+                $sellerModel = new SellerModel('');
+                $sellerModel->updateLocation($db, $userID, $newLocation);
+            }
+
+            // Redirect to the profile page after the update
+            header("Location: /profile");
+            exit();
+        }
+    } 
+
 }
 
 }

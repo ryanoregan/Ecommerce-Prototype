@@ -150,5 +150,73 @@ class UserModel
         
             return $result; // Return the result set
     }
+
+    public function updateUserName($db, $userID, $newUserName)
+    {
+        $sql = "UPDATE Users SET userName = ? WHERE userID = ?";
+        $fields = [$newUserName, $userID]; // Include userID in fields array
     
+        // Log the SQL query and parameters
+        error_log("Executing query: " . $sql . " with parameters: " . json_encode($fields));
+    
+        // Execute the prepared statement
+        $result = $db->queryPrepared($sql, $fields);
+        
+        // Check if the query execution was successful
+        if ($result === false) {
+            error_log("Failed to update username for user ID: " . $userID);
+            return false; // Return false on failure
+        }
+    
+        // Log success message
+        error_log("Successfully updated username for user ID: " . $userID);
+        
+        return true; // Return true to indicate success
+    }
+
+    public function updateEmail($db, $userID, $newEmail)
+    {
+        $sql = "UPDATE Users SET Email = ? WHERE userID = ?";
+        $fields = [$newEmail, $userID]; // Include userID in fields array
+    
+        // Log the SQL query and parameters
+        error_log("Executing query: " . $sql . " with parameters: " . json_encode($fields));
+    
+        // Execute the prepared statement
+        $result = $db->queryPrepared($sql, $fields);
+        
+        // Check if the query execution was successful
+        if ($result === false) {
+            error_log("Failed to update username for user ID: " . $userID);
+            return false; // Return false on failure
+        }
+    
+        // Log success message
+        error_log("Successfully updated username for user ID: " . $userID);
+        
+        return true; // Return true to indicate success
+    }
+
+    public function updatePassword($db, $userID, $hashedPassword)
+    {
+        $sql = "UPDATE Users SET Password = ? WHERE userID = ?";
+        $fields = [$hashedPassword, $userID]; // Include userID in fields array
+    
+        // Log the SQL query and parameters
+        error_log("Executing query: " . $sql . " with parameters: " . json_encode($fields));
+    
+        // Execute the prepared statement
+        $result = $db->queryPrepared($sql, $fields);
+        
+        // Check if the query execution was successful
+        if ($result === false) {
+            error_log("Failed to update username for user ID: " . $userID);
+            return false; // Return false on failure
+        }
+    
+        // Log success message
+        error_log("Successfully updated username for user ID: " . $userID);
+        
+        return true; // Return true to indicate success
+    }
 }

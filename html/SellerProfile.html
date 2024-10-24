@@ -27,7 +27,6 @@
       <nav class="flex space-x-4">
         <a href="/MyWebsite/Assessment%203/index.php/addSaleItem" class="hover:underline">Sell</a>
         <a href="/MyWebsite/Assessment%203/index.php/listings" class="hover:underline">My Listings</a>
-        <a href="#" class="hover:underline">Groups Beta</a>
         <a href="/MyWebsite/Assessment%203/index.php/profile" class="hover:underline">Profile</a>
         <a href="/MyWebsite/Assessment%203/index.php/logout" class="hover:underline">Logout</a>
       </nav>
@@ -41,15 +40,23 @@
       <div class="profile-info">
         <h3 class="text-xl font-semibold mb-4">User Details</h3>
         <tbody>
-            <?php echo $this->renderProfile(); // Render the profile dynamically ?>
+        <!-- Dynamic content rendering based on action -->
+        <?php
+          // Fetch action and userID from URL query parameters
+          $action = $_GET['action'] ?? null;
+          $userID = $_GET['userID'] ?? null;
+
+          if ($action === 'edit' && $userID !== null) {
+              // Load the edit form if action is 'edit'
+              echo $this->renderEditForm();
+          } else {
+              // Load the profile view otherwise
+              echo $this->renderProfile();
+          }
+        ?>
           </tbody>
       </div>
     </div>
-
-    <div class="mt-8 text-center">
-      <a href="/MyWebsite/Assessment%203/index.php/editProfile" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
-        Edit Profile
-      </a>
     </div>
   </main>
 

@@ -64,6 +64,18 @@ if ($recordCount !== false) {
 $uri = new URI($_SERVER['HTTP_HOST']); // Create URI object with the host
 $uri->createFromRequest(); // Populate the parts of the URI from the request
 
+//uri to handle action
+$action = $_GET['action'] ?? null;
+$userID = $_GET['userID'] ?? null;
+// Routing logic
+if ($action === 'edit' && $userID !== null) {
+    $sellerController = new SellerController($context);
+    $sellerController->getProfile($action, $userID);
+    exit();
+} else {
+    // Handle any other cases or errors here
+    echo "Invalid request.";
+}
 
 // Routing based on the last part of the URI
 $lastPart = end($uri->parts); // Get the last part of the URI
@@ -146,13 +158,24 @@ switch ($lastPart) {
         $sellerController->getListings();
         break;
 
-    case 'profile':
-        $sellerController = new SellerController($context);
-        $sellerController->getProfile();
-        break;
 
+        case 'profile':
+            $sellerController = new SellerController($context);
+            $sellerController->getProfile();
+                    // Check if there are any query parameters
+                    $action = $_GET['action'] ?? null;
+                    $userID = $_GET['userID'] ?? null;
+            
+            break;
+
+    case 'submitEdit':
+        $sellerController = new Agora\Controller\SellerController($context);
+        $sellerController->submitEdit();
+        break;
+        
     default:
         // Handle 404 error or redirect to home
         http_response_code(404);
         echo '404 Not Found';
 }
+
