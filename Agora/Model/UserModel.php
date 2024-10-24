@@ -150,4 +150,5 @@ class UserModel
         
             return $result; // Return the result set
     }
+    
 }

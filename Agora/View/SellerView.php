@@ -7,6 +7,7 @@ class SellerView extends AbstractView
     // Optional: You can define properties specific to the SellerView if needed
     private array $listings = [];
     private array $Profile = [];
+    private string $location;
 
     // Method to prepare data for rendering the seller's dashboard or homepage
     public function prepare(): void
@@ -34,7 +35,13 @@ class SellerView extends AbstractView
 
     public function setProfile(array $Profile)
     {
-        $this->Profile = $Profile;
+        $this->Profile = $Profile['user'];
+        $this->location = $Profile['location']; 
+    }
+
+    public function setLocation(string $location)
+    {
+        $this->location = $location;
     }
 
     public function renderListings(): string
@@ -72,6 +79,7 @@ class SellerView extends AbstractView
             $output .= "<td class='px-4 py-2'>" . htmlspecialchars($user->getUserName() ?? 'No Username') . "</td>";
             $output .= "<td class='px-4 py-2'>" . htmlspecialchars($user->getEmail() ?? 'No Email') . "</td>";
             $output .= "<td class='px-4 py-2'>" . htmlspecialchars($user->getRole() ?? 'No Role') . "</td>";
+            $output .= "<td class='px-4 py-2'>" . htmlspecialchars($this->location ?? 'No Location') . "</td>";
             $output .= "<td class='px-4 py-2'>";
             $output .= "<button class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg'>Edit</button>";
             $output .= "<button class='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg ml-2'>Delete</button>";

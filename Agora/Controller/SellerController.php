@@ -6,6 +6,7 @@ use Agora\Database\IContext;
 use Agora\Model\ItemModel; // Use ItemModel to represent the item being sold
 use Agora\Model\UserModel;
 use Agora\View\SellerView; // Assuming you have a SellerView to render seller-related pages
+use Agora\Model\SellerModel;
 
 class SellerController extends AbstractController
 {
@@ -192,12 +193,18 @@ class SellerController extends AbstractController
             $profileData[0]['Role']
         );
 
+        // Create an instance of SellerModel to get the location
+        $sellerModel = new SellerModel(''); // Assuming a constructor that sets necessary properties
+        $location = $sellerModel->getLocationByUserID($db, $sellerID); // Fetch location
+
+
         // Render the profile page
         $sellerView = new SellerView();
         $sellerView->setTemplate('./html/SellerProfile.html');
 
-        // Pass the user profile to the view
-        $sellerView->setProfile($Profile); // Assuming you will implement this in the view
+// Pass the user profile and location to the view
+$sellerView->setProfile(['user' => $Profile, 'location' => $location]); // Pass associative array
+
 
         echo $sellerView->render();
 

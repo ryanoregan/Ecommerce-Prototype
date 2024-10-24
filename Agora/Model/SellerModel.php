@@ -36,4 +36,19 @@ class SellerModel
         // Assuming the item is successfully added and returning true
         return true;
     }
+
+
+    public function getLocationByUserID($db, $userID)
+    {
+        $sql = "SELECT Location FROM Sellers WHERE UserID = ?";
+        $fields = [$userID];
+
+        $result = $db->queryPrepared($sql, $fields);
+
+        if ($result === false || empty($result)) {
+            return null; // Return null if not found
+        }
+
+        return $result[0]['Location']; // Assuming the result is an associative array
+    }
 }

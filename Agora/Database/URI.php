@@ -5,7 +5,7 @@ namespace Agora\Database;
 class URI implements IURI
 {
     private string $site;       // The base site URL
-    private array $parts;       // Array to store parts of the URI
+    public array $parts;       // Array to store parts of the URI
 
     // Constructor to initialize the URI components
     public function __construct(string $site, array $parts = [])
@@ -36,7 +36,7 @@ class URI implements IURI
     // Method to get the raw URI as a string
     public function getRawUri(): string
     {
-        return $this->site . '/' . implode('/', $this->parts);
+        return  implode('/', $this->parts);
     }
 
     // Method to get the remaining parts of the URI
