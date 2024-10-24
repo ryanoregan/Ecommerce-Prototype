@@ -3,32 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile - Agora</title>
-  <base href="/MyWebsite/Assessment%203/">
-  <link href="./html/output.css" rel="stylesheet">
+  <title>Shop - Agora</title>
+  <link href= "../html/output.css" rel="stylesheet">
   <style>
-    .profile-info {
-      background-color: #fff;
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .profile-image {
-      max-width: 100px;
-      border-radius: 50%;
+    .search-bar {
+      background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"%3E%3Cpath stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M16.65 16.65A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z"%3E%3C/path%3E%3C/svg%3E');
+      background-repeat: no-repeat;
+      background-position: 8px center;
+      background-size: 16px 16px;
+      padding-left: 32px;
     }
   </style>
 </head>
-
 <body class="bg-gray-100">
   <header class="bg-blue-500 text-white py-4">
     <div class="container mx-auto flex justify-between items-center">
       <h1 class="text-2xl font-bold">Agora</h1>
-
       <nav class="flex space-x-4">
-        <a href="/MyWebsite/Assessment%203/index.php/addSaleItem" class="hover:underline">Sell</a>
-        <a href="/MyWebsite/Assessment%203/index.php/listings" class="hover:underline">My Listings</a>
-        <a href="/MyWebsite/Assessment%203/index.php/profile" class="hover:underline">Profile</a>
+        <a href="/MyWebsite/Assessment%203/index.php/dashboard" class="hover:underline">Shop</a>
+        <a href="/MyWebsite/Assessment%203/index.php/buyerProfile" class="hover:underline">Profile</a>
         <a href="/MyWebsite/Assessment%203/index.php/logout" class="hover:underline">Logout</a>
       </nav>
     </div>
@@ -43,17 +36,8 @@
         <tbody>
         <!-- Dynamic content rendering based on action -->
         <?php
-          // Fetch action and userID from URL query parameters
-          $action = $_GET['action'] ?? null;
-          $userID = $_GET['userID'] ?? null;
-
-          if ($action === 'edit' && $userID !== null) {
-              // Load the edit form if action is 'edit'
-              echo $this->renderEditForm();
-          } else {
-              // Load the profile view otherwise
+              // Load the profile view 
               echo $this->renderProfile();
-          }
         ?>
           </tbody>
       </div>

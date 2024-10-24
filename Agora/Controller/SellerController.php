@@ -255,9 +255,9 @@ public function submitEdit()
                 $sellerModel = new SellerModel('');
                 $sellerModel->updateLocation($db, $userID, $newLocation);
             }
-
+            
             // Redirect to the profile page after the update
-            header("Location: /profile");
+            header("Location: ./index.php/profile");
             exit();
         }
     } 

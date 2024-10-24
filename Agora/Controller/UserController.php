@@ -226,4 +226,56 @@ public function renderSellerView($errorMessage = null)
             echo 'Error: ' . htmlspecialchars($e->getMessage()); // Display the error message safely
         }
     }
+
+    public function getProfile()
+    {
+        // Check if the user is logged in
+        $user = $this->context->getUser();
+        if ($user === null) {
+            echo "<script>alert('You must be logged in to view your listings.'); window.history.back();</script>";
+            return;
+        }
+    
+        // Get the current seller's ID
+        $userID = $user->getUserID();
+    
+        try {
+            // Access the database through Context
+            $db = $this->context->getDB();
+            if (!$db->isConnected()) {
+                error_log("Database connection is not established.");
+                return false;
+            }
+    
+            // Fetch all listings for the current seller
+            // Assuming `getItemsBySellerID` returns an array of associative arrays
+            $userModel = new UserModel(0, '', '', 0.0, 0); // Placeholder constructor to access method
+            $profileData = $userModel->getProfilebyUserID($db, $userID); // Fetch items
+    
+        // Check if profileData is an array and contains data
+        if (!is_array($profileData) || empty($profileData)) {
+            throw new \Exception("No profile data found for user ID: $userID.");
+        }
+
+        var_dump($profileData); // Check what you get here
+        var_dump($profileData[0]['UserID']); // Debug output
+        // Create UserModel instance with the fetched data
+        $Profile[] = new UserModel(
+            $profileData[0]['UserID'],
+            $profileData[0]['UserName'],
+            $profileData[0]['Email'],
+            $profileData[0]['Password'],
+            $profileData[0]['Role']
+        );
+
+        $buyerView = new buyerView();
+        $buyerView->setTemplate('./html/buyerProfile.html');
+        $buyerView->setProfile(['user' => $Profile,]); // Pass associative array
+        echo $buyerView->render();
+
+    } catch (\Exception $e) {
+        // Handle exceptions during the retrieval of profile data
+        echo 'Error: ' . htmlspecialchars($e->getMessage());
+    }
+}
 }

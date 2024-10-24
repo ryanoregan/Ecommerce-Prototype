@@ -72,9 +72,6 @@ if ($action === 'edit' && $userID !== null) {
     $sellerController = new SellerController($context);
     $sellerController->getProfile($action, $userID);
     exit();
-} else {
-    // Handle any other cases or errors here
-    echo "Invalid request.";
 }
 
 // Routing based on the last part of the URI
@@ -166,6 +163,11 @@ switch ($lastPart) {
                     $action = $_GET['action'] ?? null;
                     $userID = $_GET['userID'] ?? null;
             
+            break;
+
+        case 'buyerProfile':
+            $userController = new UserController($context);
+            $userController->getProfile();
             break;
 
     case 'submitEdit':
