@@ -101,9 +101,26 @@ class ItemModel
             return $result; // Return the result set
         }
 
+        public function getItemById($db, $itemID)
+        {
+            $sql = "SELECT * FROM Items WHERE ItemID = ?";
+            $fields = [$itemID];
+
+            $result = $db->queryPrepared($sql, $fields);
+
+            // Check if $result is false or empty
+            if ($result === false || empty($result)) {
+                return null; // Return null if not found
+            }
+            // Log the retrieved results
+            error_log("Retrieved items: " . print_r($result, true));
+            return $result; // Return the first item
+        
+        }
+
         public function getAllItems($db)
     {
-        $sql = "SELECT ItemName, Description, Price, ImagePath FROM Items";
+        $sql = "SELECT * FROM Items";
         
         // Log the SQL query
         error_log("Executing query: " . $sql);

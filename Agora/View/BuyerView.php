@@ -9,6 +9,7 @@ class BuyerView extends AbstractView
     private array $items = [];
 
 
+
     // Method to prepare data for rendering the buyer's dashboard or homepage
     public function prepare(): void
     {
@@ -91,16 +92,58 @@ class BuyerView extends AbstractView
             // Display item name and price with flexbox layout
             $output .= "<div class='flex justify-between items-center'>";
             $output .= "<div class='p-4 border rounded-lg'><span class='text-lg font-semibold'>" . htmlspecialchars($item->getItemName() ?? 'No Item Name') . "</span></div>";
-            $output .= "<div class='p-4 border rounded-lg'><span class='text-xl font-bold'>$" . htmlspecialchars($item->getPrice() ?? 'No Price') . "</span></div>";
+            $output .= "<div class='p-4 border rounded-lg'><span class='text-xl font-bold'>" . htmlspecialchars($item->getPrice() ?? 'No Price') . "</span></div>";
             $output .= "</div>"; // Close flex container
     
             // Display description in smaller font
             $output .= "<div class='p-4 border rounded-lg text-sm'>" . htmlspecialchars($item->getDescription() ?? 'No Description') . "</div>";
+    
+            // Add a View button that links to the details page
+            $itemID = htmlspecialchars($item->getItemID()); // Assuming you have a getItemID() method
+            $output .= "<div class='flex justify-end mt-4'>";
+            $output .= "<a href='?action=viewItem&itemID=" . $itemID . "' class='bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600'>View</a>";
+            $output .= "</div>"; // Close flex
     
             $output .= "</div>"; // Close grid
             $output .= "</div>"; // Close card
         }
     
         return $output; // Return the accumulated output for rendering
+    }
+
+        public function renderItemDetail()
+    {
+        foreach($this->items as $item) {
+        $output = "<div class='bg-white shadow-md rounded-lg p-4 mb-4'>";
+        $output .= "<div class='flex flex-col items-center'>";
+        
+
+           // Define the base URL for your uploads directory
+           $baseURL = '/MyWebsite/Assessment%203/'; // Adjust this according to your actual directory structure
+    
+            // Display image if available
+            if ($item->getImagePath()) {
+                // Construct the full image URL
+                $fullImagePath = $baseURL . htmlspecialchars($item->getImagePath());
+    
+                $output .= "<div class='p-4 border rounded-lg'><img src='" . $fullImagePath . "' alt='Item Image' class='w-full h-auto rounded-lg mb-2'></div>";
+            } else {
+                $output .= "<div class='p-4 border rounded-lg'><strong>No Image Available</strong></div>";
+            }
+
+        // Item Name
+        $output .= "<h2 class='text-2xl font-bold'>" . htmlspecialchars($item->getItemName()) . "</h2>";
+        
+        // Price
+        $output .= "<div class='text-xl text-green-600'>$" . htmlspecialchars($item->getPrice()) . "</div>";
+
+        // Description
+        $output .= "<p class='mt-2'>" . htmlspecialchars($item->getDescription()) . "</p>";
+
+        $output .= "</div>"; // Close flex container
+        $output .= "</div>"; // Close card
+
+        return $output; // Return the accumulated output for rendering
+    }
     }
 }

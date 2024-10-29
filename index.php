@@ -69,12 +69,19 @@ $uri->createFromRequest(); // Populate the parts of the URI from the request
 //uri to handle action
 $action = $_GET['action'] ?? null;
 $userID = $_GET['userID'] ?? null;
+$itemID = $_GET['itemID'] ?? null;
 // Routing logic
 if ($action === 'edit' && $userID !== null) {
     $sellerController = new SellerController($context);
     $sellerController->getProfile($action, $userID);
     exit();
 }
+if ($action === 'viewItem' && $itemID !== null) {
+    $buyerController = new BuyerController($context);
+    $buyerController->viewItemDetail($action, $itemID);
+    exit();
+}
+
 
 // Routing based on the last part of the URI
 $lastPart = end($uri->parts); // Get the last part of the URI
@@ -176,6 +183,7 @@ switch ($lastPart) {
         $sellerController = new Agora\Controller\SellerController($context);
         $sellerController->submitEdit();
         break;
+        
         
     default:
         // Handle 404 error or redirect to home

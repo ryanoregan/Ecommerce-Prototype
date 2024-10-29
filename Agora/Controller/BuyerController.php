@@ -34,11 +34,11 @@ class BuyerController extends AbstractController
             $items = [];
             foreach ($allItemsData as $itemData) {
                 $items[] = new ItemModel(
-                    0,
+                    $itemData['ItemID'],
                     $itemData['ItemName'],
                     $itemData['Description'],
                     (float)$itemData['Price'],
-                    0,
+                    $itemData['SellerID'],
                     $itemData['ImagePath'] ?? null
                 );
             }
@@ -53,5 +53,50 @@ class BuyerController extends AbstractController
             // Handle exceptions during item retrieval
             echo 'Error: ' . htmlspecialchars($e->getMessage());
         }
+    }
+
+    public function viewItemDetail()
+    {
+        $itemID = $_GET['itemID'] ?? null;
+    
+        // Check if itemID is provided
+        if (!$itemID) {
+            echo "<p>Item ID not provided.</p>";
+            return;
+        }
+    
+        // Access the database through the context
+        $db = $this->context->getDB();
+        if (!$db->isConnected()) {
+            error_log("Database connection is not established.");
+            echo "<p>Database connection error.</p>";
+            return;
+        }
+    
+        // Fetch the item by ID
+        $itemModel = new ItemModel(0, '', '', 0.0, 0);
+        $itemData = $itemModel->getItemById($db, $itemID);
+    
+        // If item was not found
+        if (!$itemData) {
+            echo "<p>Item not found.</p>";
+            return;
+        }
+    
+        // Create an ItemModel instance based on fetched data
+        $item = new ItemModel(
+            $itemData[0]['ItemID'],
+            $itemData[0]['ItemName'],
+            $itemData[0]['Description'],
+            (float)$itemData[0]['Price'],
+            $itemData[0]['SellerID'],
+            $itemData[0]['ImagePath'] ?? null
+        );
+    
+        // Render the item detail page
+        $buyerView = new BuyerView();
+        $buyerView->setTemplate('./html/Buyer.html'); // Path to buyer items template
+        $buyerView->setItems([$item]); // Pass as array if view expects it
+        echo $buyerView->render();
     }
 }
