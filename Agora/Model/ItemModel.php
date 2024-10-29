@@ -100,4 +100,26 @@ class ItemModel
         
             return $result; // Return the result set
         }
+
+        public function getAllItems($db)
+    {
+        $sql = "SELECT ItemName, Description, Price, ImagePath FROM Items";
+        
+        // Log the SQL query
+        error_log("Executing query: " . $sql);
+        
+        // Execute the query without any parameters
+        $result = $db->query($sql);
+        
+        // Check if $result is false
+        if ($result === false) {
+            error_log("Failed to retrieve all items.");
+            return []; // Return an empty array on failure
+        }
+        
+        // Log the retrieved results
+        error_log("Retrieved all items: " . print_r($result, true));
+        
+        return $result; // Return the result set
+    }
 }

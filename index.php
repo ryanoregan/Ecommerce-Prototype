@@ -10,6 +10,7 @@ require_once './Agora/Database/Database.php';
 require_once './Agora/Controller/AbstractController.php';
 require_once './Agora/Controller/UserController.php';
 require_once './Agora/Controller/SellerController.php';
+require_once './Agora/Controller/BuyerController.php';
 require_once './Agora/View/AbstractView.php';
 require_once './Agora/View/LoginView.php';
 require_once './Agora/View/SignUpView.php';
@@ -27,6 +28,7 @@ use Agora\Database\Session;
 use Agora\Controller\UserController;
 use Agora\View\BuyerView; // Add this to the top of your index.php
 use Agora\Controller\SellerController;
+use Agora\Controller\BuyerController;
 use Agora\Database\URI;
 
 session_start(); // Start the session
@@ -120,8 +122,8 @@ switch ($lastPart) {
 
                 switch ($role) {
                     case 'Buyer':
-                        $userController = new UserController($context);
-                        $userController->renderBuyerView();
+                        $buyerController = new BuyerController($context);
+                        $buyerController->getAllItems();
                         break;
                     case 'Seller':
                         $userController = new UserController($context);

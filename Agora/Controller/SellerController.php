@@ -39,24 +39,34 @@ class SellerController extends AbstractController
             }
 
 
-        // Handle image upload
-        $imagePath = null; // Initialize image path
-        if (isset($_FILES['item_image']) && $_FILES['item_image']['error'] == UPLOAD_ERR_OK) {
-            $targetDir = "uploads/"; // Make sure this directory is writable
-            $targetFile = $targetDir . basename($_FILES["item_image"]["name"]);
+            // Handle image upload
+            $imagePath = null; // Initialize image path
+            if (isset($_FILES['item_image']) && $_FILES['item_image']['error'] == UPLOAD_ERR_OK) {
+                $targetDir = "uploads/"; // Make sure this directory is writable
+                $targetFile = $targetDir . basename($_FILES["item_image"]["name"]);
 
-            // Move the uploaded file to the target directory
-            if (move_uploaded_file($_FILES["item_image"]["tmp_name"], $targetFile)) {
-                $imagePath = $targetFile; // Store the path for the database
+                // Get the file type
+                $fileType = mime_content_type($_FILES["item_image"]["tmp_name"]); // Get MIME type of the uploaded file
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+                // Validate file type
+                if (!in_array($fileType, $allowedTypes)) {
+                    echo "<script>alert('Invalid file type. Please upload an image (JPEG, PNG, GIF).'); window.history.back();</script>";
+                    return;
+                }
+
+                // Move the uploaded file to the target directory
+                if (move_uploaded_file($_FILES["item_image"]["tmp_name"], $targetFile)) {
+                    $imagePath = $targetFile; // Store the path for the database
+                } else {
+                    // Handle error (e.g., file move failed)
+                    echo "<script>alert('Error uploading the image.'); window.history.back();</script>";
+                    return;
+                }
             } else {
-                // Handle error (e.g., file move failed)
-                echo "<script>alert('Error uploading the image.'); window.history.back();</script>";
+                echo "<script>alert('No image was uploaded or there was an upload error.'); window.history.back();</script>";
                 return;
             }
-        } else {
-            echo "<script>alert('No image was uploaded.'); window.history.back();</script>";
-            return;
-        }
     
             try {
                 // Create an ItemModel instance to represent the sale item
