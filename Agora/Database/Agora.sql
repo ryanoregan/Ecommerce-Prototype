@@ -9,6 +9,7 @@ BusinessName VARCHAR(50) NOT NULL,
 LegalBusinessDetails VARCHAR(100) NOT NULL,
 HQLocation VARCHAR (50) NOT NULL,
 AdditionalLocations VARCHAR(50),
+ImagePath VARCHAR(255) NULL,
 PRIMARY KEY (BusinessID)
 ) engine = InnoDB;
 

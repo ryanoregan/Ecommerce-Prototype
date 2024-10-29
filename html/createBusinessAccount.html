@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Business Account - Agora</title>
+    <link href="../html/output.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <!-- Agora Top Bar -->
+    <header class="bg-blue-500 text-white py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Agora</h1>
+            <nav class="flex space-x-4">
+                <a href="/MyWebsite/Assessment%203/index.php/dashboard" class="hover:underline">Shop</a>
+                <a href="/MyWebsite/Assessment%203/index.php/businessAdmin" class="hover:underline">Business Admin</a>
+                <a href="/MyWebsite/Assessment%203/index.php/logout" class="hover:underline">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto mt-8">
+        <h2 class="text-3xl font-bold mb-8 text-center">Create New Business Account</h2>
+
+        <!-- Business Account Creation Form -->
+        <div class="bg-white shadow-md rounded-lg p-8">
+            <form action="/MyWebsite/Assessment%203/index.php/createBusinessAccount" method="POST" enctype="multipart/form-data">
+                <!-- Business Name -->
+                <div class="mb-6">
+                    <label for="businessName" class="block text-gray-700 font-bold mb-2">Business Name</label>
+                    <input type="text" id="businessName" name="businessName" class="w-full p-3 border rounded-lg" required>
+                </div>
+                
+                <!-- Legal Business Details -->
+                <div class="mb-6">
+                    <label for="legalDetails" class="block text-gray-700 font-bold mb-2">Legal Business Details</label>
+                    <textarea id="legalDetails" name="legalDetails" class="w-full p-3 border rounded-lg" rows="4" required></textarea>
+                </div>
+
+                <!-- HQ Location -->
+                <div class="mb-6">
+                    <label for="hqLocationn" class="block text-gray-700 font-bold mb-2">Headquarters Location</label>
+                    <input type="text" id="hqLocation" name="hqLocation" class="w-full p-3 border rounded-lg" required>
+                </div>
+
+                <!-- Additional Locations -->
+                <div class="mb-6">
+                    <label for="additionalLocations" class="block text-gray-700 font-bold mb-2">Additional Locations</label>
+                    <textarea id="additionalLocations" name="additionalLocations" class="w-full p-3 border rounded-lg" rows="3" placeholder="Enter additional locations, separated by commas"></textarea>
+                </div>
+
+                <!-- Upload Business Logo -->
+                <div class="mb-6">
+                    <label for="businessLogo" class="block text-gray-700 font-bold mb-2">Upload Business Logo</label>
+                    <input type="file" id="businessLogo" name="businessLogo" class="w-full p-3 border rounded-lg" accept="image/*">
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600">
+                        Create Business Account
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Chat Button -->
+    <div class="fixed bottom-4 right-4">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full text-lg">
+            Chat
+        </button>
+    </div>
+</body>
+</html>

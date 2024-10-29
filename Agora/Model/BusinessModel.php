@@ -2,28 +2,23 @@
 
 namespace Agora\Model;
 
-class BusinessModel
-{
-    private int $businessID;
-    private string $businessName;
-    private string $legalBusinessDetails;
-    private string $HQLocation;
-    private array $additionalLocations;  // Storing multiple locations as an array
+class BusinessModel {
+    private $businessID;
+    private $businessName;
+    private $legalBusinessDetails;
+    private $hqLocation;
+    private $additionalLocations;
+    private $imagePath;
 
-    // Constructor to initialize the business data
-    public function __construct(
-        int $businessID,
-        string $businessName,
-        string $legalBusinessDetails,
-        string $HQLocation,
-        array $additionalLocations = []
-    ) {
+    public function __construct(int $businessID, string $businessName, string $legalBusinessDetails, string $hqLocation, array $additionalLocations, ?string $imagePath) {
         $this->businessID = $businessID;
         $this->businessName = $businessName;
         $this->legalBusinessDetails = $legalBusinessDetails;
-        $this->HQLocation = $HQLocation;
+        $this->hqLocation = $hqLocation;
         $this->additionalLocations = $additionalLocations;
+        $this->imagePath = $imagePath;
     }
+
 
     // Getter for businessID
     public function getBusinessID(): int
@@ -60,4 +55,31 @@ class BusinessModel
     {
         return implode(', ', $this->additionalLocations);
     }
+
+    public function createBusiness(\Agora\Database\Database $db): bool
+{
+    // SQL query to insert a new business
+    $sql = "INSERT INTO Business (BusinessName, LegalBusinessDetails, HQLocation, AdditionalLocations, ImagePath) VALUES (?, ?, ?, ?, ?)";
+    
+    // Prepare parameters for binding
+    $fields = [
+        $this->businessName,
+        $this->legalBusinessDetails,
+        $this->hqLocation,
+        $this->additionalLocations,
+        $this->imagePath
+    ];
+
+    // Debugging: Log the SQL and parameters
+    error_log("Executing SQL: $sql");
+    error_log("Parameters: businessName={$this->businessName}, legalBusinessDetails={$this->legalBusinessDetails}, hqLocation={$this->hqLocation}, additionalLocations={$this->additionalLocations}, imagePath={$this->imagePath}");
+    
+    // Execute the prepared statement
+    if (!$db->executePrepared($sql, $fields)) {
+        error_log("Business creation failed for business: {$this->businessName}");
+        return false;
+    }
+
+    return true; // Return true if the business was created successfully
+}
 }

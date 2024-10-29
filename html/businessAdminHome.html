@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Admin - Agora</title>
+    <link href="../html/output.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <!-- Agora Top Bar -->
+    <header class="bg-blue-500 text-white py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Agora</h1>
+            <nav class="flex space-x-4">
+                <a href="/MyWebsite/Assessment%203/index.php/businessAdmin" class="hover:underline">Business Admin</a>
+                <a href="/MyWebsite/Assessment%203/index.php/logout" class="hover:underline">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto mt-8">
+        <h2 class="text-3xl font-bold mb-8 text-center">Business Admin Dashboard</h2>
+
+        <!-- Create Business Account Button -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold">My Business Accounts</h2>
+            <a href="/MyWebsite/Assessment%203/index.php/createBusinessAccount" class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600">
+                Create New Business Account
+            </a>
+        </div>
+
+        <!-- Business Accounts List -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <table class="min-w-full border-collapse">
+                <thead>
+                    <tr>
+                        <th class="border-b-2 text-left p-4">Logo</th>
+                        <th class="border-b-2 text-left p-4">Business ID</th>
+                        <th class="border-b-2 text-left p-4">Business Name</th>
+                        <th class="border-b-2 text-left p-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Example business account row with logo -->
+                    <tr class="hover:bg-gray-100">
+                        <td class="border-b p-4">
+                            <img src="/MyWebsite/Assessment%203/uploads/logo_001.png" alt="Logo for Tech Solutions LLC" class="w-16 h-16 rounded-full">
+                        </td>
+                        <td class="border-b p-4">001</td>
+                        <td class="border-b p-4">Tech Solutions LLC</td>
+                        <td class="border-b p-4">
+                            <a href="/MyWebsite

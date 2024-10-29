@@ -111,39 +111,50 @@ class BuyerView extends AbstractView
         return $output; // Return the accumulated output for rendering
     }
 
-        public function renderItemDetail()
+    public function renderItemDetail()
     {
-        foreach($this->items as $item) {
-        $output = "<div class='bg-white shadow-md rounded-lg p-4 mb-4'>";
-        $output .= "<div class='flex flex-col items-center'>";
-        
-
-           // Define the base URL for your uploads directory
-           $baseURL = '/MyWebsite/Assessment%203/'; // Adjust this according to your actual directory structure
+        foreach ($this->items as $item) {
+            $output = "<div class='bg-white shadow-md rounded-lg p-4 mb-4'>";
+            $output .= "<div class='flex flex-col items-center'>";
+            
+            // Define the base URL for your uploads directory
+            $baseURL = '/MyWebsite/Assessment%203/'; // Adjust this according to your actual directory structure
     
             // Display image if available
             if ($item->getImagePath()) {
                 // Construct the full image URL
                 $fullImagePath = $baseURL . htmlspecialchars($item->getImagePath());
-    
                 $output .= "<div class='p-4 border rounded-lg'><img src='" . $fullImagePath . "' alt='Item Image' class='w-full h-auto rounded-lg mb-2'></div>";
             } else {
                 $output .= "<div class='p-4 border rounded-lg'><strong>No Image Available</strong></div>";
             }
-
-        // Item Name
-        $output .= "<h2 class='text-2xl font-bold'>" . htmlspecialchars($item->getItemName()) . "</h2>";
-        
-        // Price
-        $output .= "<div class='text-xl text-green-600'>$" . htmlspecialchars($item->getPrice()) . "</div>";
-
-        // Description
-        $output .= "<p class='mt-2'>" . htmlspecialchars($item->getDescription()) . "</p>";
-
-        $output .= "</div>"; // Close flex container
-        $output .= "</div>"; // Close card
-
-        return $output; // Return the accumulated output for rendering
-    }
+    
+            // Item Name
+            $output .= "<h2 class='text-2xl font-bold'>" . htmlspecialchars($item->getItemName()) . "</h2>";
+            
+            // Price
+            $output .= "<div class='text-xl text-green-600'>$" . htmlspecialchars($item->getPrice()) . "</div>";
+    
+            // Description
+            $output .= "<p class='mt-2'>" . htmlspecialchars($item->getDescription()) . "</p>";
+    
+            // "Buy Now" button
+            $output .= "<button onclick='buyNow()' class='mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600'>Buy Now</button>";
+    
+            $output .= "</div>"; // Close flex container
+            $output .= "</div>"; // Close card
+    
+            // JavaScript for "Buy Now" button action
+            $output .= "
+                <script>
+                    function buyNow() {
+                        alert('Thank you for your purchase!');
+                        window.location.href = window.location.href; // Reload the current page
+                    }
+                </script>
+            ";
+    
+            return $output; // Return the accumulated output for rendering
+        }
     }
 }

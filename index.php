@@ -11,15 +11,18 @@ require_once './Agora/Controller/AbstractController.php';
 require_once './Agora/Controller/UserController.php';
 require_once './Agora/Controller/SellerController.php';
 require_once './Agora/Controller/BuyerController.php';
+require_once './Agora/Controller/BusinessController.php';
 require_once './Agora/View/AbstractView.php';
 require_once './Agora/View/LoginView.php';
 require_once './Agora/View/SignUpView.php';
-require_once __DIR__ . '/Agora/View/BuyerView.php'; // Adjust as needed for your structure
+require_once __DIR__ . '/Agora/View/BuyerView.php';
 require_once __DIR__ . '/Agora/View/SellerView.php';
+require_once __DIR__ . '/Agora/View/BusinessView.php';
 require_once './Agora/Database/ISession.php';
 require_once './Agora/Database/Session.php';
 require_once './Agora/Model/ItemModel.php'; // Adjust the path as necessary
 require_once './Agora/Model/SellerModel.php'; // Adjust the path as necessary
+require_once './Agora/Model/BusinessModel.php'; // Adjust the path as necessary
 require_once './Agora/Database/IURI.php';
 require_once './Agora/Database/URI.php'; // Include the URI class
 
@@ -29,6 +32,7 @@ use Agora\Controller\UserController;
 use Agora\View\BuyerView; // Add this to the top of your index.php
 use Agora\Controller\SellerController;
 use Agora\Controller\BuyerController;
+use Agora\Controller\BusinessController;
 use Agora\Database\URI;
 
 session_start(); // Start the session
@@ -140,7 +144,8 @@ switch ($lastPart) {
                         // Implement a MasterAdminView
                         break;
                     case 'Business Account Administrator':
-                        // Implement a BusinessAdminView
+                        $businessController = new BusinessController($context);
+                        $businessController->getAdminHome();
                         break;
                     default:
                         echo "Invalid user role!";
@@ -183,6 +188,11 @@ switch ($lastPart) {
         $sellerController = new Agora\Controller\SellerController($context);
         $sellerController->submitEdit();
         break;
+
+        case 'createBusinessAccount':
+            $businessController = new Agora\Controller\BusinessController($context);
+            $businessController->handleCreateBusinessAccount();
+            break;
         
         
     default:
