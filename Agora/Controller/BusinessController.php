@@ -18,25 +18,6 @@ class BusinessController extends AbstractController
         $this->context = $context;
     }
 
-    public function getAdminHome($errorMessage = null)
-    {
-        try {
-            $businessView = new BusinessView(); // Create an instance of SellerView
-            $businessView->setTemplate('./html/BusinessAdminHome.html'); // Set the template path
-            $businessView->setTemplateField('username', $this->context->getUser()); 
-    
-            // Optionally set an error message
-            if ($errorMessage) {
-                $businessView->setTemplateField('errorMessage', $errorMessage);
-            }
-    
-            echo $businessView->render(); // Render the view
-        } catch (\Exception $e) {
-            // Handle exceptions during rendering
-            echo 'Error: ' . htmlspecialchars($e->getMessage());
-        }
-    }
-
     public function handleCreateBusinessAccount() {
         // Check if the user is logged in
         $user = $this->context->getUser();
@@ -97,9 +78,12 @@ class BusinessController extends AbstractController
                     error_log("Database connection is not established.");
                     return false;
                 }
+
+                $userID = $user->getUserID(); // Get the UserID as an integer
+
     
                 // Save the business account to the database (assuming BusinessModel has a createBusiness method)
-                $businessModel->createBusiness($db);
+                $businessModel->createBusiness($db, $userID);
 
             // Show success alert and redirect to dashboard
             echo "<script>alert('Business Account created successfully!'); window.location.href='/MyWebsite/Assessment%203/index.php/dashboard';</script>";
@@ -118,4 +102,115 @@ class BusinessController extends AbstractController
             }
         }
     }
+
+    public function getBusinessAccounts()
+    {
+        // Check if the user is logged in
+        $user = $this->context->getUser();
+        if ($user === null) {
+            echo "<script>alert('You must be logged in to view your business accounts.'); window.history.back();</script>";
+            return;
+        }
+    
+        // Get the current user's ID
+        $userID = $user->getUserID();
+    
+        try {
+            // Access the database through Context
+            $db = $this->context->getDB();
+            if (!$db->isConnected()) {
+                error_log("Database connection is not established.");
+                return false;
+            }
+    
+            // Fetch all business accounts for the current user
+            $businessModel = new BusinessModel(0, '', '', '', [], ''); // Placeholder constructor to access method
+            $businessAccountsData = $businessModel->getBusinessAccountsByUserID($db, $userID); // Fetch business accounts
+    
+            // Ensure businessAccountsData is an array
+            if (!is_array($businessAccountsData)) {
+                throw new \Exception("Failed to fetch business accounts.");
+            }
+    
+            // Convert fetched data into `BusinessModel` objects
+            $businessAccounts = [];
+            foreach ($businessAccountsData as $businessData) {
+                $businessAccounts[] = new BusinessModel(
+                    $businessData['BusinessID'],
+                    $businessData['BusinessName'],
+                    $businessData['LegalBusinessDetails'],
+                    $businessData['HQLocation'],
+                    !empty($businessData['AdditionalLocations']) ? explode(',', $businessData['AdditionalLocations']) : [], // Convert string to array
+                    $businessData['ImagePath'] ?? null // Assuming ImagePath is optional
+                );
+            }
+    
+ 
+                // Render the business accounts page
+                $businessView = new BusinessView();
+                $businessView->setTemplate('./html/BusinessAdminHome.html'); // Adjust path to the business accounts template
+                $businessView->setBusinessAccounts($businessAccounts); // Pass the business accounts to the view
+                echo $businessView->render();
+            
+    
+        } catch (\Exception $e) {
+            // Handle exceptions during the process
+            echo 'Error: ' . htmlspecialchars($e->getMessage());
+        }
+    }
+
+    public function submitEditAccounts()
+{
+    $db = $this->context->getDB();
+    if (!$db->isConnected()) {
+        error_log("Database connection is not established.");
+        return false;
+    }
+    
+    // Check if request is POST for form submission
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $businessID = $_POST['businessID'] ?? null;
+
+        if ($businessID) {
+            // Retrieve posted data
+            $newBusinessName = $_POST['businessName'] ?? null;
+            $newLegalDetails = $_POST['legalBusinessDetails'] ?? null;
+            $newHQLocation = $_POST['hqLocation'] ?? null;
+            $newAdditionalLocations = $_POST['additionalLocations'] ?? null; // Comma-separated list
+            $logoImage = $_FILES['logoImage'] ?? null;
+
+            // Update business details
+            $businessModel = new BusinessModel(0, '', '', '', [], '');
+            
+            if ($newBusinessName) {
+                $businessModel->updateBusinessName($db, $businessID, $newBusinessName);
+            }
+            if ($newLegalDetails) {
+                $businessModel->updateLegalBusinessDetails($db, $businessID, $newLegalDetails);
+            }
+            if ($newHQLocation) {
+                $businessModel->updateHQLocation($db, $businessID, $newHQLocation);
+            }
+            if ($newAdditionalLocations) {
+                // Convert comma-separated string to array and update
+                $locationsArray = array_map('trim', explode(',', $newAdditionalLocations));
+                $businessModel->updateAdditionalLocations($db, $businessID, $locationsArray);
+            }
+            if ($logoImage && $logoImage['error'] === UPLOAD_ERR_OK) {
+                // Handle logo image upload
+                $targetDir = '/path/to/uploads/'; // Define your actual upload path
+                $targetFile = $targetDir . basename($logoImage['name']);
+                if (move_uploaded_file($logoImage['tmp_name'], $targetFile)) {
+                    $businessModel->updateLogoPath($db, $businessID, $targetFile);
+                } else {
+                    error_log("Failed to upload logo image.");
+                }
+            }
+            
+            // Redirect to the business accounts page after the update
+            header("Location: ./index.php/dashboard");
+            exit();
+        }
+    }
+}
 }

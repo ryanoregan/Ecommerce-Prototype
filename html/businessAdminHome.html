@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Admin - Agora</title>
-    <link href="../html/output.css" rel="stylesheet">
+    <base href="/MyWebsite/Assessment%203/">
+    <link href="./html/output.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
     <!-- Agora Top Bar -->
@@ -12,7 +13,7 @@
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-2xl font-bold">Agora</h1>
             <nav class="flex space-x-4">
-                <a href="/MyWebsite/Assessment%203/index.php/businessAdmin" class="hover:underline">Business Admin</a>
+                <a href="/MyWebsite/Assessment%203/index.php/dashboard" class="hover:underline">Business Admin</a>
                 <a href="/MyWebsite/Assessment%203/index.php/logout" class="hover:underline">Logout</a>
             </nav>
         </div>
@@ -33,21 +34,20 @@
         <!-- Business Accounts List -->
         <div class="bg-white shadow-md rounded-lg p-6">
             <table class="min-w-full border-collapse">
-                <thead>
-                    <tr>
-                        <th class="border-b-2 text-left p-4">Logo</th>
-                        <th class="border-b-2 text-left p-4">Business ID</th>
-                        <th class="border-b-2 text-left p-4">Business Name</th>
-                        <th class="border-b-2 text-left p-4">Actions</th>
-                    </tr>
-                </thead>
                 <tbody>
-                    <!-- Example business account row with logo -->
-                    <tr class="hover:bg-gray-100">
-                        <td class="border-b p-4">
-                            <img src="/MyWebsite/Assessment%203/uploads/logo_001.png" alt="Logo for Tech Solutions LLC" class="w-16 h-16 rounded-full">
-                        </td>
-                        <td class="border-b p-4">001</td>
-                        <td class="border-b p-4">Tech Solutions LLC</td>
-                        <td class="border-b p-4">
-                            <a href="/MyWebsite
+                    <?php
+                    // Fetch action and businessID from URL query parameters
+                    $action = $_GET['action'] ?? null;
+                    $businessID = $_GET['businessID'] ?? null;
+          
+                    if ($action === 'edit' && $businessID !== null) {
+                        // Load the edit form if action is 'edit'
+                        echo $this->renderEditAccounts($businessID);
+                    } else {
+                        // Load the profile view otherwise
+                        echo $this->renderBusinessAccounts();
+                    }
+                  ?>
+                  </tbody>
+            </table>
+        </div>

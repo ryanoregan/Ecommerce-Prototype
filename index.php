@@ -74,6 +74,7 @@ $uri->createFromRequest(); // Populate the parts of the URI from the request
 $action = $_GET['action'] ?? null;
 $userID = $_GET['userID'] ?? null;
 $itemID = $_GET['itemID'] ?? null;
+$businessID = $_GET['businessID'] ?? null;
 // Routing logic
 if ($action === 'edit' && $userID !== null) {
     $sellerController = new SellerController($context);
@@ -83,6 +84,11 @@ if ($action === 'edit' && $userID !== null) {
 if ($action === 'viewItem' && $itemID !== null) {
     $buyerController = new BuyerController($context);
     $buyerController->viewItemDetail($action, $itemID);
+    exit();
+}
+if ($action === 'edit' && $businessID !== null) {
+    $businessController = new BusinessController($context);
+    $businessController->getBusinessAccounts($action, $itemID);
     exit();
 }
 
@@ -145,7 +151,7 @@ switch ($lastPart) {
                         break;
                     case 'Business Account Administrator':
                         $businessController = new BusinessController($context);
-                        $businessController->getAdminHome();
+                        $businessController->getBusinessAccounts();
                         break;
                     default:
                         echo "Invalid user role!";
@@ -193,6 +199,12 @@ switch ($lastPart) {
             $businessController = new Agora\Controller\BusinessController($context);
             $businessController->handleCreateBusinessAccount();
             break;
+
+            case 'submitEditAccounts':
+                $businessController = new Agora\Controller\BusinessController($context);
+                $businessController->submitEditAccounts();
+                break;
+        
         
         
     default:

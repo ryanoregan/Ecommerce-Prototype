@@ -103,7 +103,7 @@ class Database implements IDatabase
 
         $stmt->execute();
         $result = $stmt->get_result();
-        
+
         // Fetch all results as an associative array
         return $result ? $result->fetch_all(MYSQLI_ASSOC) : null; // Return results or null if no results
     }
@@ -194,7 +194,31 @@ class Database implements IDatabase
         return $this->conn instanceof \mysqli && $this->conn->ping();
     }
 
-    // Database.php
+// Method to find a user by UserID and return their role
+public function getUserRoleByUserID(int $userID): ?string
+{
+    // Use a prepared statement to prevent SQL injection
+    $stmt = $this->conn->prepare("SELECT Role FROM Users WHERE UserID = ? LIMIT 1");
+    if ($stmt === false) {
+        $this->sqlError("Preparing statement failed");
+        return null; // Return null if preparation fails
+    }
+
+    // Bind the userID parameter
+    $stmt->bind_param('i', $userID);
+    $stmt->execute();
+
+    // Get the result
+    $result = $stmt->get_result();
+    
+    // Fetch the role
+    $role = $result->fetch_assoc()['Role'] ?? null; // Return the role or null if not found
+
+    // Close the statement
+    $stmt->close();
+    
+    return $role; // Return the user role
+}
 
 public function testQuery()
 {
