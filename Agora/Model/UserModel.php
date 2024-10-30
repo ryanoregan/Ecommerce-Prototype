@@ -219,4 +219,29 @@ class UserModel
         
         return true; // Return true to indicate success
     }
+
+    public function getRoleByUserID($db, int $userID): ?string
+{
+    // SQL query to retrieve the role
+    $sql = "SELECT Role FROM Users WHERE UserID = ?";
+    $fields = [$userID];
+    
+    // Log the SQL query and parameters
+    error_log("Executing query: " . $sql . " with parameters: " . json_encode($fields));
+    
+    // Execute the prepared statement
+    $result = $db->queryPrepared($sql, $fields);
+    
+    // Check if $result is false or empty
+    if ($result === false || empty($result)) {
+        error_log("Failed to retrieve role for user ID: " . $userID);
+        return null; // Return null if the query fails or no role is found
+    }
+    
+    // Log the retrieved role
+    error_log("Retrieved role for user ID {$userID}: " . $result[0]['Role']);
+    
+    // Return the role from the result set
+    return $result[0]['Role'];
+}    
 }

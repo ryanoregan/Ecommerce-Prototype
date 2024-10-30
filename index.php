@@ -88,7 +88,13 @@ if ($action === 'viewItem' && $itemID !== null) {
 }
 if ($action === 'edit' && $businessID !== null) {
     $businessController = new BusinessController($context);
-    $businessController->getBusinessAccounts($action, $itemID);
+    $businessController->getBusinessAccounts($action, $businessID);
+    exit();
+}
+
+if ($businessID !== null) {
+    $businessController = new BusinessController($context);
+    $businessController->getConnections($businessID);
     exit();
 }
 
@@ -204,8 +210,12 @@ switch ($lastPart) {
                 $businessController = new Agora\Controller\BusinessController($context);
                 $businessController->submitEditAccounts();
                 break;
-        
-        
+
+    
+                case 'connections':
+                    $businessController = new Agora\Controller\BusinessController($context);
+                    $businessController->handleAddConnection();
+                    break;
         
     default:
         // Handle 404 error or redirect to home

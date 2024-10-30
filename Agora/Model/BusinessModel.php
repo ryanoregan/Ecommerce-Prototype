@@ -159,4 +159,61 @@ class BusinessModel {
 
         return $result ?: [];
     }
+
+    public function getConnectionsByBusinessID(\Agora\Database\Database $db, int $businessID): array
+{
+    // SQL query to fetch user connections for the specified business ID
+    $sql = "
+        SELECT ub.UserID, ub.Role
+        FROM Users_Business ub
+        WHERE ub.BusinessID = ?
+    ";
+
+    // Prepare and execute the query with businessID as the parameter
+    $params = [$businessID];
+    $result = $db->queryPrepared($sql, $params);
+
+    // Check for a valid result
+    if ($result === false) {
+        error_log("Failed to fetch connections for BusinessID: $businessID");
+        return []; // Return an empty array if there was an error
+    }
+
+    return $result ? $result : [];
+}
+
+public function getBusinessNameByID($database, $businessID)
+{
+    $sql = "SELECT BusinessName FROM Business WHERE BusinessID = ?";
+    $fields = [$businessID]; // Parameters to bind
+
+    // Use the executePrepared method, which is already handling the binding and execution
+    $result = $database->queryPrepared($sql, $fields);
+    
+    return $result ? $result[0]['BusinessName'] : null; // Return the first result or null if not found
+}
+
+public function addConnection(\Agora\Database\Database $db, int $userID, int $businessID, string $role): bool
+{
+    // Check if the user exists in the Users table
+    $sqlCheckUser = "SELECT COUNT(*) FROM Users WHERE UserID = ?";
+    $paramsCheckUser = [$userID];
+    $userExists = $db->queryPrepared($sqlCheckUser, $paramsCheckUser);
+
+
+  
+
+    // SQL query to insert a new connection into the Users_Business table
+    $sql = "INSERT INTO Users_Business (BusinessID, UserID, Role) VALUES (?, ?, ?)";
+    $fields = [$userID, $businessID, $role];
+// In your PHP code where you want the alert
+echo "<script>alert('Executing SQL: $sql with parameters: " . implode(", ", $fields) . "');</script>";
+    // Execute the prepared statement
+    if (!$db->executePrepared($sql, $fields)) {
+        error_log("Failed to add connection: UserID=$userID to BusinessID=$businessID with Role=$role");
+        return false; // Return false on failure
+    }
+
+    return true; // Return true to indicate success
+}
 }

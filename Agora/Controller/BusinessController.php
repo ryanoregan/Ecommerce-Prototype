@@ -5,7 +5,7 @@ namespace Agora\Controller;
 use Agora\Database\IContext;
 use Agora\View\BusinessView;
 use Agora\Model\BusinessModel;
-
+use Agora\Model\UserModel;
 
 
 class BusinessController extends AbstractController
@@ -210,6 +210,88 @@ class BusinessController extends AbstractController
             // Redirect to the business accounts page after the update
             header("Location: ./index.php/dashboard");
             exit();
+        }
+    }
+}
+
+public function getConnections(int $businessID)
+{
+    // Ensure the user is logged in
+    $user = $this->context->getUser();
+    if ($user === null) {
+        echo "<script>alert('You must be logged in to view connections.'); window.history.back();</script>";
+        return;
+    }
+
+    try {
+        // Access the database through Context
+        $db = $this->context->getDB();
+        if (!$db->isConnected()) {
+            error_log("Database connection is not established.");
+            return false;
+        }
+
+        // Fetch connections for the specified business ID
+        $businessModel = new BusinessModel(0, '', '', '', [], '');
+        $connectionsData = $businessModel->getConnectionsByBusinessID($db, $businessID);
+
+        // Fetch business name based on businessID
+        $businessName = $businessModel->getBusinessNameByID($db, $businessID);
+
+        // Create view and set data
+        $businessView = new BusinessView();
+        $businessView->setTemplate('./html/connections.html');
+        $businessView->setConnections($connectionsData);
+        $businessView->setBusinessName($businessName); // Pass the business name to the view
+        $businessView->setBusinessID($businessID);
+        echo $businessView->render();
+
+    } catch (\Exception $e) {
+        echo 'Error: ' . htmlspecialchars($e->getMessage());
+    }
+}
+
+public function handleAddConnection() {
+    // Ensure the user is logged in
+    $user = $this->context->getUser();
+    if ($user === null) {
+        echo "<script>alert('You must be logged in to add a connection.'); window.history.back();</script>";
+        return;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $businessID = $_POST['businessID'] ?? null;
+        $userID = $_POST['userID'] ?? null;
+
+        // Validate input
+        if ($businessID && $userID) {
+            try {
+                // Access the database through Context
+                $db = $this->context->getDB();
+                if (!$db->isConnected()) {
+                    error_log("Database connection is not established.");
+                    return false;
+                }
+
+                // Check if userID exists and retrieve role
+                $userModel = new UserModel(0, '', '', 0.0, 0);
+                $userRole = $userModel->getRoleByUserID($db, $userID);
+
+                if ($userRole) {
+                    // Add connection to Users_Business table
+                    $businessModel = new BusinessModel(0, '', '', '', [], '');
+                    $businessModel->addConnection($db, $businessID, $userID, $userRole);
+
+                    // Show success alert
+                    echo "<script>alert('Connection added successfully!'); window.history.back();</script>";
+                } else {
+                    echo "<script>alert('User ID does not exist.'); window.history.back();</script>";
+                }
+            } catch (\Exception $e) {
+                echo 'Error: ' . htmlspecialchars($e->getMessage());
+            }
+        } else {
+            echo "<script>alert('Business ID and User ID are required.'); window.history.back();</script>";
         }
     }
 }

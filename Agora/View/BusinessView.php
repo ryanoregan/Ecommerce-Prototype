@@ -5,6 +5,9 @@ namespace Agora\View;
 class BusinessView extends AbstractView
 {
     private $businessAccounts = [];
+    private $connectionsData = [];
+    private $businessName;
+    private $businessID;
 
     // Method to prepare data for rendering the business view
     public function prepare(): void
@@ -17,6 +20,24 @@ class BusinessView extends AbstractView
     public function setBusinessAccounts(array $businessAccounts): void
     {
         $this->businessAccounts = $businessAccounts;
+    }
+
+    // Method to set the business name
+    public function setBusinessName(string $businessName): void
+    {
+        $this->businessName = $businessName;
+    }
+
+    // Method to set the business ID
+    public function setBusinessID(int $businessID): void
+    {
+    $this->businessID = $businessID;
+    }
+
+     // Method to set the connections
+    public function setConnections(array $connectionsData): void
+    {
+        $this->connectionsData = $connectionsData;
     }
 
     // Method to render the sign-up view
@@ -63,8 +84,12 @@ public function renderBusinessAccounts(): string
             
             // Action buttons container
             $output .= "<div class='mt-4 flex justify-between'>"; 
-            $output .= "<a href='http://localhost/MyWebsite/Assessment%203/index.php/dashboard?action=edit&businessID=" . htmlspecialchars($account->getBusinessID()) . "'class='text-blue-500 hover:underline'>Edit</a>";
+            $output .= "<a href='http://localhost/MyWebsite/Assessment%203/index.php/dashboard?action=edit&businessID=" . htmlspecialchars($account->getBusinessID()) . "' class='text-blue-500 hover:underline'>Edit</a>";
             $output .= "<a href='#' class='text-red-500 hover:underline'>Delete</a>";
+
+            // Connections button
+            $output .= "<a href='http://localhost/MyWebsite/Assessment%203/index.php/connections?businessID=" . htmlspecialchars($account->getBusinessID()) . "' class='text-green-500 hover:underline'>Connections</a>";
+
             $output .= "</div>"; // End of action buttons
             
             $output .= "</div>"; // End of card container
@@ -145,4 +170,59 @@ public function renderEditAccounts(int $businessID): string
 
     return $output;
 }
+
+    // Modify the renderConnections method to include the business name
+    public function renderConnections(): string
+    {
+        // Ensure connections data is available
+        if (empty($this->connectionsData)) {
+            return "<p>No connections found for this business account.</p>";
+        }
+    
+        $output = "<h1 class='text-3xl font-bold mb-6'>Connections for \"" . htmlspecialchars($this->businessName) . "\"</h1>"; // Use the business name
+        $output .= "<table class='min-w-full bg-white border border-gray-300 rounded-lg shadow-md'>";
+        $output .= "<thead class='bg-gray-200 text-gray-600'>";
+        $output .= "<tr>";
+        $output .= "<th class='px-4 py-2 text-left'>User ID</th>";
+        $output .= "<th class='px-4 py-2 text-left'>Role</th>";
+        $output .= "</tr>";
+        $output .= "</thead>";
+        $output .= "<tbody>";
+
+        // Loop through each connection and display their details
+        foreach ($this->connectionsData as $connection) {
+            $output .= "<tr class='border-t border-gray-300'>";
+            $output .= "<td class='px-4 py-2'>" . htmlspecialchars($connection['UserID']) . "</td>";
+            $output .= "<td class='px-4 py-2'>" . htmlspecialchars($connection['Role']) . "</td>";
+            $output .= "<td class='px-4 py-2'>";
+            $output .= "<form action='/MyWebsite/Assessment%203/index.php/addConnection' method='post' class='inline'>";
+            $output .= "</form>";
+            $output .= "</td>";
+            $output .= "</tr>";
+        }
+
+        $output .= "</tbody>";
+        $output .= "</table>";
+
+    // Add the form to add a new connection at the bottom of the connections table
+    $output .= '
+    <div class="bg-white rounded-lg shadow-md p-6 mt-4">
+        <h2 class="text-2xl font-semibold mb-4">Add a New Connection</h2>
+        <div class="bg-white rounded-lg shadow-md p-2 mt-4 w-1/3">
+        <form method="POST" action="' . htmlspecialchars($_SERVER['PHP_SELF']) . '">
+            <input type="hidden" name="businessID" value="' . htmlspecialchars($this->businessID) . '">
+            <input type="hidden" value="UserID"> 
+            <div class="flex items-center">
+                <input type="text" name="userID" placeholder="User ID" class="w-full px-2 py-1 border rounded-lg" required>
+                <button type="submit" class="ml-2 bg-blue-500 text-white px-2 py-1 rounded-lg hover:bg-blue-700">
+                    Add
+                </button>
+            </div>
+        </form>
+    </div>
+    ';
+
+
+        return $output;
+    }
 }
