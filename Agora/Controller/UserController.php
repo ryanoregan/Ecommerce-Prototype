@@ -122,40 +122,43 @@ class UserController extends AbstractController
             $password = $_POST['password'] ?? '';
             $confirmPassword = $_POST['confirm_password'] ?? '';
             $role = $_POST['role'] ?? 'Buyer'; // Default role if not provided
-
+    
             if ($password !== $confirmPassword) {
                 echo "<script>alert('Passwords do not match.'); window.history.back();</script>";
                 return;
             }
-
-            // Logic to create a new user account
+    
             try {
-                // Create a UserModel instance with default values for userID and isLoggedIn
-                $userModel = new UserModel(0, $username, $email, '', $role, false); // Password will be set later
-                // Hash the password before saving
-                $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
                 // Access the database through Context
                 $db = $this->context->getDB();
                 if (!$db->isConnected()) {
                     error_log("Database connection is not established.");
-                    return false; // Or handle it appropriately
+                    return false;
                 }
-
-                // Call createUser with the Database instance
+    
+                // Check if the username already exists
+                $userModel = new UserModel(0, '', '', '', '', false); // Temporary instance to access methods
+                if ($userModel->usernameExists($db, $username)) {
+                    echo "<script>alert('Username already exists. Please choose a different one.'); window.history.back();</script>";
+                    return;
+                }
+    
+                // Proceed with user creation if username is unique
+                $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+                $userModel = new UserModel(0, $username, $email, '', $role, false); // Password will be set later
                 $userModel->createUser($db, $username, $email, $hashedPassword);
-
-            // Show alert for successful signup
-            echo "<script>alert('User registered successfully! Please log in.'); window.location.href = '/MyWebsite/Assessment%203/index.php';</script>";
-            exit();
-        } catch (\Exception $e) {
-            // Handle exceptions during user creation
-            $this->renderSignUpView('Error: ' . htmlspecialchars($e->getMessage()));
+    
+                // Show alert for successful signup
+                echo "<script>alert('User registered successfully! Please log in.'); window.location.href = '/MyWebsite/Assessment%203/index.php';</script>";
+                exit();
+            } catch (\Exception $e) {
+                // Handle exceptions during user creation
+                $this->renderSignUpView('Error: ' . htmlspecialchars($e->getMessage()));
+            }
+        } else {
+            // If not a POST request, show the signup form
+            $this->renderSignUpView();
         }
-    } else {
-        // If not a POST request, show the signup form
-        $this->renderSignUpView();
-    }
     }
 
     public function renderSignUpView($errorMessage = null)

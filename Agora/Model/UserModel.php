@@ -244,4 +244,28 @@ class UserModel
     // Return the role from the result set
     return $result[0]['Role'];
 }    
+
+public function usernameExists($db, $username): bool
+{
+    $sql = "SELECT COUNT(*) AS count FROM Users WHERE UserName = ?";
+    $fields = [$username];
+    
+    // Log the SQL query and parameters for debugging
+    error_log("Executing query: " . $sql . " with parameters: " . json_encode($fields));
+    
+    // Execute the prepared statement
+    $result = $db->queryPrepared($sql, $fields);
+    
+    // Check if query execution was successful and retrieve count
+    if ($result === false || empty($result)) {
+        error_log("Failed to check username existence for: " . $username);
+        return false;
+    }
+    
+    // Log the retrieved count for debugging
+    error_log("Username existence check for '{$username}': " . $result[0]['count']);
+    
+    // Return true if count is greater than 0, indicating the username exists
+    return $result[0]['count'] > 0;
+}
 }

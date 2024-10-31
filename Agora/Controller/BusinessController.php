@@ -198,10 +198,10 @@ class BusinessController extends AbstractController
             }
             if ($logoImage && $logoImage['error'] === UPLOAD_ERR_OK) {
                 // Handle logo image upload
-                $targetDir = '/path/to/uploads/'; // Define your actual upload path
+                $targetDir = "uploads/"; // Define your actual upload path
                 $targetFile = $targetDir . basename($logoImage['name']);
                 if (move_uploaded_file($logoImage['tmp_name'], $targetFile)) {
-                    $businessModel->updateLogoPath($db, $businessID, $targetFile);
+                    $businessModel->updateImagePath($db, $businessID, $targetFile);
                 } else {
                     error_log("Failed to upload logo image.");
                 }
