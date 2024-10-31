@@ -29,6 +29,11 @@ class BuyerView extends AbstractView
         $this->items = $items; // Store the items in the property
     }
 
+    public function setBusinesses(array $businesses)
+    {
+        $this->businesses = $businesses;
+    }
+
 
     // Method to render the buyer's view
     public function render(): string
@@ -157,4 +162,23 @@ class BuyerView extends AbstractView
             return $output; // Return the accumulated output for rendering
         }
     }
+
+    public function renderConnections()
+{
+
+
+    echo '<table>';
+    echo '<thead><tr><th>Business Name</th><th>Legal Details</th><th>HQ Location</th><th>Additional Locations</th></tr></thead>';
+    echo '<tbody>';
+    foreach ($this->businesses as $business) {
+        echo '<tr>';
+        echo '<td>' . htmlspecialchars($business['BusinessName']) . '</td>';
+        echo '<td>' . htmlspecialchars($business['LegalBusinessDetails']) . '</td>';
+        echo '<td>' . htmlspecialchars($business['HQLocation']) . '</td>';
+        echo '<td>' . htmlspecialchars($business['AdditionalLocations']) . '</td>';
+        echo '</tr>';
+    }
+    echo '</tbody>';
+    echo '</table>';
+}
 }

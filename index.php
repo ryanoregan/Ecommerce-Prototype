@@ -222,6 +222,11 @@ switch ($lastPart) {
                 $sellerController->showConnections();
                 break;
 
+            case 'buyerConnections':
+                $buyerController = new Agora\Controller\BuyerController($context);
+                $buyerController->showConnections();
+                break;
+
         
     default:
         // Handle 404 error or redirect to home

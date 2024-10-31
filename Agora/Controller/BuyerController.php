@@ -99,4 +99,34 @@ class BuyerController extends AbstractController
         $buyerView->setItems([$item]); // Pass as array if view expects it
         echo $buyerView->render();
     }
+
+    public function showConnections()
+{
+    // Check if the user is logged in
+    $user = $this->context->getUser();
+    if ($user === null) {
+        echo "<script>alert('You must be logged in to view your connections.'); window.history.back();</script>";
+        return;
+    }
+
+    // Get the current seller's ID
+    $userID = $user->getUserID();
+
+    // Access the database through Context
+    $db = $this->context->getDB();
+    if (!$db->isConnected()) {
+        echo "<script>alert('Database connection is not established. Please try again later.'); window.history.back();</script>";
+        return;
+    }
+
+    // Instantiate the BusinessModel and fetch businesses
+    $businessModel = new \Agora\Model\BusinessModel(0, '', '', '', [], '');
+    $businesses = $businessModel->getBusinessAccountsByUserID($db, $userID);
+
+    // Render the connections view if businesses exist, otherwise show a message
+    $buyerView = new BuyerView();
+    $buyerView->setTemplate('./html/BuyerConnections.html');
+    $buyerView->setBusinesses($businesses);
+    echo $buyerView->render();
+}
 }
