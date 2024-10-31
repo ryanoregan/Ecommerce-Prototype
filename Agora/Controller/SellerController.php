@@ -274,4 +274,33 @@ public function submitEdit()
 
 }
 
+public function showConnections()
+{
+    // Check if the user is logged in
+    $user = $this->context->getUser();
+    if ($user === null) {
+        echo "<script>alert('You must be logged in to view your connections.'); window.history.back();</script>";
+        return;
+    }
+
+    // Get the current seller's ID
+    $sellerID = $user->getUserID();
+
+    // Access the database through Context
+    $db = $this->context->getDB();
+    if (!$db->isConnected()) {
+        echo "<script>alert('Database connection is not established. Please try again later.'); window.history.back();</script>";
+        return;
+    }
+
+    // Instantiate the BusinessModel and fetch businesses
+    $businessModel = new \Agora\Model\BusinessModel(0, '', '', '', [], '');
+    $businesses = $businessModel->getBusinessAccountsByUserID($db, $sellerID);
+
+    // Render the connections view if businesses exist, otherwise show a message
+    $sellerView = new SellerView();
+    $sellerView->setTemplate('./html/SellerConnections.html');
+    $sellerView->setBusinesses($businesses);
+    echo $sellerView->render();
+}
 }

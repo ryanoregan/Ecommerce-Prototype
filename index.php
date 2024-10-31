@@ -216,6 +216,12 @@ switch ($lastPart) {
                     $businessController = new Agora\Controller\BusinessController($context);
                     $businessController->handleAddConnection();
                     break;
+
+            case 'sellerConnections':
+                $sellerController = new Agora\Controller\SellerController($context);
+                $sellerController->showConnections();
+                break;
+
         
     default:
         // Handle 404 error or redirect to home

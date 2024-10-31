@@ -8,6 +8,7 @@ class SellerView extends AbstractView
     private array $listings = [];
     private array $Profile = [];
     private string $location;
+    private array $businesses = [];
 
     // Method to prepare data for rendering the seller's dashboard or homepage
     public function prepare(): void
@@ -43,6 +44,11 @@ class SellerView extends AbstractView
     {
         $this->location = $location;
     }
+    public function setBusinesses(array $businesses)
+    {
+        $this->businesses = $businesses;
+    }
+
 
     public function renderListings(): string
     {
@@ -146,6 +152,25 @@ class SellerView extends AbstractView
         // Echo the form
         echo $output;
     }
+}
+
+public function renderConnections()
+{
+
+
+    echo '<table>';
+    echo '<thead><tr><th>Business Name</th><th>Legal Details</th><th>HQ Location</th><th>Additional Locations</th></tr></thead>';
+    echo '<tbody>';
+    foreach ($this->businesses as $business) {
+        echo '<tr>';
+        echo '<td>' . htmlspecialchars($business['BusinessName']) . '</td>';
+        echo '<td>' . htmlspecialchars($business['LegalBusinessDetails']) . '</td>';
+        echo '<td>' . htmlspecialchars($business['HQLocation']) . '</td>';
+        echo '<td>' . htmlspecialchars($business['AdditionalLocations']) . '</td>';
+        echo '</tr>';
+    }
+    echo '</tbody>';
+    echo '</table>';
 }
 
 }
