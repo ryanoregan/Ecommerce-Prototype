@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'email' => $user['Email'], // Adjust based on your user table
             'role' => $user['Role'] // Adjust based on your user table
         ];
-        
+
         // Redirect to a logged-in page (e.g., dashboard)
         header('Location: /MyWebsite/Assessment%203/dashboard.php'); // Change to your dashboard page
         exit();

@@ -24,40 +24,24 @@ class SellerModel
         $sql = "UPDATE Sellers SET Location = ? WHERE UserID = ?";
 
         $fields = [$newLocation, $userID]; // Include userID in fields array
-    
+
         // Log the SQL query and parameters
         error_log("Executing query: " . $sql . " with parameters: " . json_encode($fields));
-    
+
         // Execute the prepared statement
         $result = $db->queryPrepared($sql, $fields);
-        
+
         // Check if the query execution was successful
         if ($result === false) {
             error_log("Failed to update username for user ID: " . $userID);
             return false; // Return false on failure
         }
-    
+
         // Log success message
         error_log("Successfully updated username for user ID: " . $userID);
-        
+
         return true; // Return true to indicate success
 
-    }
-
-
-
-    
-
-    // Method to add an item for sale
-    public function addSaleItem(string $itemName, string $description, float $price, int $quantity): bool
-    {
-        // Simulate adding an item to the seller's inventory
-        // In a real application, this would interact with a database to save the sale item
-        echo "Adding item for sale:\n";
-        echo "Item: $itemName\nDescription: $description\nPrice: $$price\nQuantity: $quantity\n";
-        
-        // Assuming the item is successfully added and returning true
-        return true;
     }
 
 

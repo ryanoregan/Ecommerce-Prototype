@@ -27,7 +27,7 @@ class BuyerController extends AbstractController
             }
 
             // Fetch all items using ItemModel
-            $itemModel = new ItemModel(0, '', '', 0.0, 0); // Adjust constructor as needed
+            $itemModel = new ItemModel(0, '', '', 0.0, 0);
             $allItemsData = $itemModel->getAllItems($db);
 
             // Convert fetched data into ItemModel objects
@@ -37,7 +37,7 @@ class BuyerController extends AbstractController
                     $itemData['ItemID'],
                     $itemData['ItemName'],
                     $itemData['Description'],
-                    (float)$itemData['Price'],
+                    (float) $itemData['Price'],
                     $itemData['SellerID'],
                     $itemData['ImagePath'] ?? null
                 );
@@ -45,8 +45,8 @@ class BuyerController extends AbstractController
 
             // Render the items page with the fetched items
             $buyerView = new BuyerView();
-            $buyerView->setTemplate('./html/Buyer.html'); // Path to buyer items template
-            $buyerView->setItems($items); // Assuming BuyerView has a setItems method
+            $buyerView->setTemplate('./html/Buyer.html');
+            $buyerView->setItems($items);
             echo $buyerView->render();
 
         } catch (\Exception $e) {
@@ -58,13 +58,13 @@ class BuyerController extends AbstractController
     public function viewItemDetail()
     {
         $itemID = $_GET['itemID'] ?? null;
-    
+
         // Check if itemID is provided
         if (!$itemID) {
             echo "<p>Item ID not provided.</p>";
             return;
         }
-    
+
         // Access the database through the context
         $db = $this->context->getDB();
         if (!$db->isConnected()) {
@@ -72,61 +72,61 @@ class BuyerController extends AbstractController
             echo "<p>Database connection error.</p>";
             return;
         }
-    
+
         // Fetch the item by ID
         $itemModel = new ItemModel(0, '', '', 0.0, 0);
         $itemData = $itemModel->getItemById($db, $itemID);
-    
+
         // If item was not found
         if (!$itemData) {
             echo "<p>Item not found.</p>";
             return;
         }
-    
+
         // Create an ItemModel instance based on fetched data
         $item = new ItemModel(
             $itemData[0]['ItemID'],
             $itemData[0]['ItemName'],
             $itemData[0]['Description'],
-            (float)$itemData[0]['Price'],
+            (float) $itemData[0]['Price'],
             $itemData[0]['SellerID'],
             $itemData[0]['ImagePath'] ?? null
         );
-    
+
         // Render the item detail page
         $buyerView = new BuyerView();
-        $buyerView->setTemplate('./html/Buyer.html'); // Path to buyer items template
+        $buyerView->setTemplate('./html/Buyer.html');
         $buyerView->setItems([$item]); // Pass as array if view expects it
         echo $buyerView->render();
     }
 
     public function showConnections()
-{
-    // Check if the user is logged in
-    $user = $this->context->getUser();
-    if ($user === null) {
-        echo "<script>alert('You must be logged in to view your connections.'); window.history.back();</script>";
-        return;
+    {
+        // Check if the user is logged in
+        $user = $this->context->getUser();
+        if ($user === null) {
+            echo "<script>alert('You must be logged in to view your connections.'); window.history.back();</script>";
+            return;
+        }
+
+        // Get the current seller's ID
+        $userID = $user->getUserID();
+
+        // Access the database through Context
+        $db = $this->context->getDB();
+        if (!$db->isConnected()) {
+            echo "<script>alert('Database connection is not established. Please try again later.'); window.history.back();</script>";
+            return;
+        }
+
+        // Instantiate the BusinessModel and fetch businesses
+        $businessModel = new \Agora\Model\BusinessModel(0, '', '', '', [], '');
+        $businesses = $businessModel->getBusinessAccountsByUserID($db, $userID);
+
+        // Render the connections view
+        $buyerView = new BuyerView();
+        $buyerView->setTemplate('./html/BuyerConnections.html');
+        $buyerView->setBusinesses($businesses);
+        echo $buyerView->render();
     }
-
-    // Get the current seller's ID
-    $userID = $user->getUserID();
-
-    // Access the database through Context
-    $db = $this->context->getDB();
-    if (!$db->isConnected()) {
-        echo "<script>alert('Database connection is not established. Please try again later.'); window.history.back();</script>";
-        return;
-    }
-
-    // Instantiate the BusinessModel and fetch businesses
-    $businessModel = new \Agora\Model\BusinessModel(0, '', '', '', [], '');
-    $businesses = $businessModel->getBusinessAccountsByUserID($db, $userID);
-
-    // Render the connections view if businesses exist, otherwise show a message
-    $buyerView = new BuyerView();
-    $buyerView->setTemplate('./html/BuyerConnections.html');
-    $buyerView->setBusinesses($businesses);
-    echo $buyerView->render();
-}
 }

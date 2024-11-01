@@ -4,8 +4,6 @@ namespace Agora\View;
 
 class LoginView extends AbstractView
 {
-    // Optional: You can define properties specific to the LoginView if needed
-
     // Method to prepare data for rendering the login view
     public function prepare(): void
     {

@@ -4,11 +4,6 @@ namespace Agora\Model;
 
 class BuyerModel
 {
-    // Constructor (can include initialization logic)
-    public function __construct()
-    {
-        // Any initialization logic for a buyer (e.g., initializing a shopping cart)
-    }
 
     // Method to search for items by name or category
     public function searchItem(string $query): array

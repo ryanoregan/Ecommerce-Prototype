@@ -29,7 +29,7 @@ class URI implements IURI
     // Method to get the ID associated with the URI
     public function getID(): int
     {
-        // Assuming the last part is the ID; adapt as needed
+        
         return !empty($this->parts) ? (int) end($this->parts) : 0; // Return the last part as ID or 0
     }
 
@@ -54,7 +54,7 @@ class URI implements IURI
     // Method to create a URI from the current request
     public function createFromRequest(): void
     {
-        // Assuming you want to use the current request's URI
+        
         $this->site = $_SERVER['HTTP_HOST'];
         $requestUri = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
         $this->parts = $requestUri;

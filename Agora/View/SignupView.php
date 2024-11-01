@@ -4,8 +4,6 @@ namespace Agora\View;
 
 class SignUpView extends AbstractView
 {
-    // Optional: You can define properties specific to the SignUpView if needed
-
     // Method to prepare data for rendering the sign-up view
     public function prepare(): void
     {

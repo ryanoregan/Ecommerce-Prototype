@@ -39,7 +39,7 @@ class Database implements IDatabase
         }
         return true;
     }
-    
+
 
     // Method to execute a batch of SQL queries
     public function executeBatch(array $list): bool
@@ -113,36 +113,34 @@ class Database implements IDatabase
     {
         // Get binding parameters
         $bindParams = $this->getBindParams($fields);
-        
+
         // Prepare the SQL statement
         $stmt = $this->conn->prepare($parameterisedSQL);
         if ($stmt === false) {
             error_log("Failed to prepare statement: " . $this->conn->error);
             return false;
         }
-    
+
         // Bind parameters
         if (!$stmt->bind_param(...$bindParams)) {
             error_log("Failed to bind parameters: " . $stmt->error);
             return false;
         }
-        
-        error_log("Preparing to execute statement..."); // Log before execution
         if (!$stmt->execute()) {
             error_log("Failed to execute prepared statement: " . $stmt->error);
             return false;
         }
         error_log("Statement executed successfully."); // Log on successful execution
-    
+
         // Check the affected rows to confirm insertion
         if ($stmt->affected_rows === 0) {
             error_log("No rows were inserted. SQL: $parameterisedSQL");
             return false;
         }
-    
+
         // If everything is successful, log the successful execution
         error_log("User created successfully. SQL: $parameterisedSQL, Params: " . implode(', ', $fields));
-    
+
         // Close the statement and return true
         $stmt->close();
         return true;
@@ -157,11 +155,11 @@ class Database implements IDatabase
             $this->sqlError("Preparing statement failed");
             return null; // Return null if preparation fails
         }
-    
+
         // Bind the username parameter
         $stmt->bind_param('s', $username);
         $stmt->execute();
-    
+
         // Get the result
         $result = $stmt->get_result();
         return $result->fetch_assoc(); // Return user data as an associative array
@@ -178,58 +176,44 @@ class Database implements IDatabase
     {
         // Log the fields received for binding
         error_log("getBindParams called with fields: " . implode(', ', $fields));
-    
-        // Assume all fields are strings, but you can adjust the logic if necessary
+
+
         $types = str_repeat('s', count($fields)); // 's' for string
-    
+
         // Log the type string that will be used for binding
         error_log("Binding types: " . $types);
 
         return array_merge([$types], $fields);
     }
-
-        // Database.php
+    
     public function isConnected(): bool
     {
         return $this->conn instanceof \mysqli && $this->conn->ping();
     }
 
-// Method to find a user by UserID and return their role
-public function getUserRoleByUserID(int $userID): ?string
-{
-    // Use a prepared statement to prevent SQL injection
-    $stmt = $this->conn->prepare("SELECT Role FROM Users WHERE UserID = ? LIMIT 1");
-    if ($stmt === false) {
-        $this->sqlError("Preparing statement failed");
-        return null; // Return null if preparation fails
+    // Method to find a user by UserID and return their role
+    public function getUserRoleByUserID(int $userID): ?string
+    {
+        // Use a prepared statement to prevent SQL injection
+        $stmt = $this->conn->prepare("SELECT Role FROM Users WHERE UserID = ? LIMIT 1");
+        if ($stmt === false) {
+            $this->sqlError("Preparing statement failed");
+            return null; // Return null if preparation fails
+        }
+
+        // Bind the userID parameter
+        $stmt->bind_param('i', $userID);
+        $stmt->execute();
+
+        // Get the result
+        $result = $stmt->get_result();
+
+        // Fetch the role
+        $role = $result->fetch_assoc()['Role'] ?? null; // Return the role or null if not found
+
+        // Close the statement
+        $stmt->close();
+
+        return $role; // Return the user role
     }
-
-    // Bind the userID parameter
-    $stmt->bind_param('i', $userID);
-    $stmt->execute();
-
-    // Get the result
-    $result = $stmt->get_result();
-    
-    // Fetch the role
-    $role = $result->fetch_assoc()['Role'] ?? null; // Return the role or null if not found
-
-    // Close the statement
-    $stmt->close();
-    
-    return $role; // Return the user role
-}
-
-public function testQuery()
-{
-    // Example query to test the connection
-    $result = $this->query("SELECT COUNT(*) AS count FROM users"); // Change 'users' to your actual table name
-    
-    if ($result) {
-        $row = $result->fetch_assoc();
-        return $row['count'];
-    }
-    
-    return false; // or throw an exception if needed
-}
 }

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Business Account - Agora</title>
     <link href="../html/output.css" rel="stylesheet">
 </head>
+
 <body class="bg-gray-100">
     <!-- Agora Top Bar -->
     <header class="bg-blue-500 text-white py-4">
@@ -24,17 +26,20 @@
 
         <!-- Business Account Creation Form -->
         <div class="bg-white shadow-md rounded-lg p-8">
-            <form action="/MyWebsite/Assessment%203/index.php/createBusinessAccount" method="POST" enctype="multipart/form-data">
+            <form action="/MyWebsite/Assessment%203/index.php/createBusinessAccount" method="POST"
+                enctype="multipart/form-data">
                 <!-- Business Name -->
                 <div class="mb-6">
                     <label for="businessName" class="block text-gray-700 font-bold mb-2">Business Name</label>
-                    <input type="text" id="businessName" name="businessName" class="w-full p-3 border rounded-lg" required>
+                    <input type="text" id="businessName" name="businessName" class="w-full p-3 border rounded-lg"
+                        required>
                 </div>
-                
+
                 <!-- Legal Business Details -->
                 <div class="mb-6">
                     <label for="legalDetails" class="block text-gray-700 font-bold mb-2">Legal Business Details</label>
-                    <textarea id="legalDetails" name="legalDetails" class="w-full p-3 border rounded-lg" rows="4" required></textarea>
+                    <textarea id="legalDetails" name="legalDetails" class="w-full p-3 border rounded-lg" rows="4"
+                        required></textarea>
                 </div>
 
                 <!-- HQ Location -->
@@ -45,19 +50,23 @@
 
                 <!-- Additional Locations -->
                 <div class="mb-6">
-                    <label for="additionalLocations" class="block text-gray-700 font-bold mb-2">Additional Locations</label>
-                    <textarea id="additionalLocations" name="additionalLocations" class="w-full p-3 border rounded-lg" rows="3" placeholder="Enter additional locations, separated by commas"></textarea>
+                    <label for="additionalLocations" class="block text-gray-700 font-bold mb-2">Additional
+                        Locations</label>
+                    <textarea id="additionalLocations" name="additionalLocations" class="w-full p-3 border rounded-lg"
+                        rows="3" placeholder="Enter additional locations, separated by commas"></textarea>
                 </div>
 
                 <!-- Upload Business Logo -->
                 <div class="mb-6">
                     <label for="businessLogo" class="block text-gray-700 font-bold mb-2">Upload Business Logo</label>
-                    <input type="file" id="businessLogo" name="businessLogo" class="w-full p-3 border rounded-lg" accept="image/*">
+                    <input type="file" id="businessLogo" name="businessLogo" class="w-full p-3 border rounded-lg"
+                        accept="image/*">
                 </div>
 
                 <!-- Submit Button -->
                 <div class="text-center">
-                    <button type="submit" class="bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600">
+                    <button type="submit"
+                        class="bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600">
                         Create Business Account
                     </button>
                 </div>
@@ -66,4 +75,5 @@
     </main>
 
 </body>
+
 </html>

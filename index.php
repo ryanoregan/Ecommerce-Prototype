@@ -2,7 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Manually require classes (adjust the paths as necessary)
+// Manually require classes
 require_once './Agora/Database/IContext.php';
 require_once './Agora/Database/Context.php';
 require_once './Agora/Database/IDatabase.php';
@@ -20,16 +20,15 @@ require_once __DIR__ . '/Agora/View/SellerView.php';
 require_once __DIR__ . '/Agora/View/BusinessView.php';
 require_once './Agora/Database/ISession.php';
 require_once './Agora/Database/Session.php';
-require_once './Agora/Model/ItemModel.php'; // Adjust the path as necessary
-require_once './Agora/Model/SellerModel.php'; // Adjust the path as necessary
-require_once './Agora/Model/BusinessModel.php'; // Adjust the path as necessary
+require_once './Agora/Model/ItemModel.php';
+require_once './Agora/Model/SellerModel.php';
+require_once './Agora/Model/BusinessModel.php';
 require_once './Agora/Database/IURI.php';
-require_once './Agora/Database/URI.php'; // Include the URI class
+require_once './Agora/Database/URI.php';
 
 use Agora\Database\Context;
 use Agora\Database\Session;
-use Agora\Controller\UserController;
-use Agora\View\BuyerView; // Add this to the top of your index.php
+use Agora\Controller\UserController; 
 use Agora\Controller\SellerController;
 use Agora\Controller\BuyerController;
 use Agora\Controller\BusinessController;
@@ -38,10 +37,10 @@ use Agora\Database\URI;
 session_start(); // Start the session
 
 // Define the path to the config file
-$configFile = __DIR__ . '/Agora/Database/config.ini'; // Adjust the path as needed
+$configFile = __DIR__ . '/Agora/Database/config.ini';
 
 // Create a new Session instance
-$session = new Session(); // Create a new instance of the Session class
+$session = new Session(); 
 
 // Initialize the database context
 try {
@@ -49,7 +48,7 @@ try {
     $context = new Context(null, '/MyWebsite/Assessment 3', [], $session); // Pass null for db initially
     $context->createFromConfigFile($configFile); // Load the config and create the DB connection
 } catch (\Exception $e) {
-    // Handle the error (for example, log it and show a friendly message)
+    // Handle the error
     echo "Error: " . $e->getMessage();
     exit; // Stop further execution
 }
@@ -57,24 +56,16 @@ try {
 // After initializing the database context
 $database = $context->getDB(); // Get the database instance from the context
 
-// Testing the database connection with a query
-$recordCount = $database->testQuery();
-
-if ($recordCount !== false) {
-    echo "Connection successful! Number of records in users table: " . $recordCount;
-} else {
-    echo "Failed to execute query.";
-}
-
 // Initialize the URI object
 $uri = new URI($_SERVER['HTTP_HOST']); // Create URI object with the host
 $uri->createFromRequest(); // Populate the parts of the URI from the request
 
-//uri to handle action
+//uri to handle actions
 $action = $_GET['action'] ?? null;
 $userID = $_GET['userID'] ?? null;
 $itemID = $_GET['itemID'] ?? null;
 $businessID = $_GET['businessID'] ?? null;
+
 // Routing logic
 if ($action === 'edit' && $userID !== null) {
     $sellerController = new SellerController($context);
@@ -152,9 +143,6 @@ switch ($lastPart) {
                         $userController = new UserController($context);
                         $userController->renderSellerView();
                         break;
-                    case 'Master Admin':
-                        // Implement a MasterAdminView
-                        break;
                     case 'Business Account Administrator':
                         $businessController = new BusinessController($context);
                         $businessController->getBusinessAccounts();
@@ -182,52 +170,52 @@ switch ($lastPart) {
         break;
 
 
-        case 'profile':
-            $sellerController = new SellerController($context);
-            $sellerController->getProfile();
-                    // Check if there are any query parameters
-                    $action = $_GET['action'] ?? null;
-                    $userID = $_GET['userID'] ?? null;
-            
-            break;
+    case 'profile':
+        $sellerController = new SellerController($context);
+        $sellerController->getProfile();
+        // Check if there are any query parameters
+        $action = $_GET['action'] ?? null;
+        $userID = $_GET['userID'] ?? null;
 
-        case 'buyerProfile':
-            $userController = new UserController($context);
-            $userController->getProfile();
-            break;
+        break;
+
+    case 'buyerProfile':
+        $userController = new UserController($context);
+        $userController->getProfile();
+        break;
 
     case 'submitEdit':
         $sellerController = new Agora\Controller\SellerController($context);
         $sellerController->submitEdit();
         break;
 
-        case 'createBusinessAccount':
-            $businessController = new Agora\Controller\BusinessController($context);
-            $businessController->handleCreateBusinessAccount();
-            break;
+    case 'createBusinessAccount':
+        $businessController = new Agora\Controller\BusinessController($context);
+        $businessController->handleCreateBusinessAccount();
+        break;
 
-            case 'submitEditAccounts':
-                $businessController = new Agora\Controller\BusinessController($context);
-                $businessController->submitEditAccounts();
-                break;
+    case 'submitEditAccounts':
+        $businessController = new Agora\Controller\BusinessController($context);
+        $businessController->submitEditAccounts();
+        break;
 
-    
-                case 'connections':
-                    $businessController = new Agora\Controller\BusinessController($context);
-                    $businessController->handleAddConnection();
-                    break;
 
-            case 'sellerConnections':
-                $sellerController = new Agora\Controller\SellerController($context);
-                $sellerController->showConnections();
-                break;
+    case 'connections':
+        $businessController = new Agora\Controller\BusinessController($context);
+        $businessController->handleAddConnection();
+        break;
 
-            case 'buyerConnections':
-                $buyerController = new Agora\Controller\BuyerController($context);
-                $buyerController->showConnections();
-                break;
+    case 'sellerConnections':
+        $sellerController = new Agora\Controller\SellerController($context);
+        $sellerController->showConnections();
+        break;
 
-        
+    case 'buyerConnections':
+        $buyerController = new Agora\Controller\BuyerController($context);
+        $buyerController->showConnections();
+        break;
+
+
     default:
         // Handle 404 error or redirect to home
         http_response_code(404);

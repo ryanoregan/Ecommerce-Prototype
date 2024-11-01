@@ -1,67 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Listings - Agora</title>
-  <link href="../html/output.css" rel="stylesheet">
-  <style>
-    .table-image {
-      max-width: 100px;
-      max-height: 100px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Listings - Agora</title>
+    <link href="../html/output.css" rel="stylesheet">
+    <style>
+        .table-image {
+            max-width: 100px;
+            max-height: 100px;
+        }
+    </style>
 </head>
+
 <body class="bg-gray-100">
-  <header class="bg-blue-500 text-white py-4">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Agora</h1>
-      <nav class="flex space-x-4">
-        <a href="/MyWebsite/Assessment%203/index.php/addSaleItem" class="hover:underline">Sell</a>
-        <a href="/MyWebsite/Assessment%203/index.php/listings" class="hover:underline">My Listings</a>
-        <a href="/MyWebsite/Assessment%203/index.php/sellerConnections" class="hover:underline">Connections</a>
-        <a href="/MyWebsite/Assessment%203/index.php/profile" class="hover:underline">Profile</a>
-        <a href="/MyWebsite/Assessment%203/index.php/logout" class="hover:underline">Logout</a>
-      </nav>
+    <header class="bg-blue-500 text-white py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Agora</h1>
+            <nav class="flex space-x-4">
+                <a href="/MyWebsite/Assessment%203/index.php/addSaleItem" class="hover:underline">Sell</a>
+                <a href="/MyWebsite/Assessment%203/index.php/listings" class="hover:underline">My Listings</a>
+                <a href="/MyWebsite/Assessment%203/index.php/sellerConnections" class="hover:underline">Connections</a>
+                <a href="/MyWebsite/Assessment%203/index.php/profile" class="hover:underline">Profile</a>
+                <a href="/MyWebsite/Assessment%203/index.php/logout" class="hover:underline">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto mt-8">
+        <h2 class="text-3xl font-bold mb-8 text-center">My Listings</h2>
+
+        <div class="bg-white shadow-md rounded-lg p-8">
+            <table class="min-w-full table-auto">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="px-4 py-2 text-left text-gray-700">Item Image</th>
+                        <th class="px-4 py-2 text-left text-gray-700">Item Name</th>
+                        <th class="px-4 py-2 text-left text-gray-700">Description</th>
+                        <th class="px-4 py-2 text-left text-gray-700">Price</th>
+                        <th class="px-4 py-2 text-left text-gray-700">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php echo $this->renderListings(); // Render the listings dynamically ?>
+                </tbody>
+            </table>
+
+            <div class="mt-4">
+                <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg">Previous</button>
+                <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg ml-2">Next</button>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <a href="/MyWebsite/Assessment%203/index.php/addSaleItem"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-full">
+                Add New Item
+            </a>
+        </div>
+    </main>
+
+    <div class="fixed bottom-4 right-4">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full text-lg">
+            Chat
+        </button>
     </div>
-  </header>
-
-  <main class="container mx-auto mt-8">
-    <h2 class="text-3xl font-bold mb-8 text-center">My Listings</h2>
-
-    <div class="bg-white shadow-md rounded-lg p-8">
-      <table class="min-w-full table-auto">
-        <thead>
-          <tr class="bg-gray-200">
-            <th class="px-4 py-2 text-left text-gray-700">Item Image</th>
-            <th class="px-4 py-2 text-left text-gray-700">Item Name</th>
-            <th class="px-4 py-2 text-left text-gray-700">Description</th>
-            <th class="px-4 py-2 text-left text-gray-700">Price</th>
-            <th class="px-4 py-2 text-left text-gray-700">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php echo $this->renderListings(); // Render the listings dynamically ?>
-        </tbody>
-      </table>
-
-      <div class="mt-4">
-        <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg">Previous</button>
-        <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg ml-2">Next</button>
-      </div>
-    </div>
-
-    <div class="mt-8 text-center">
-      <a href="/MyWebsite/Assessment%203/index.php/addSaleItem" class="bg-green-500 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-full">
-        Add New Item
-      </a>
-    </div>
-  </main>
-
-  <div class="fixed bottom-4 right-4">
-    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full text-lg">
-      Chat
-    </button>
-  </div>
 </body>
+
 </html>

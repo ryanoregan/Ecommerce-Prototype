@@ -1,49 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile - Agora</title>
-  <base href="/MyWebsite/Assessment%203/">
-  <link href="./html/output.css" rel="stylesheet">
-  <style>
-    .profile-info {
-      background-color: #fff;
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .profile-image {
-      max-width: 100px;
-      border-radius: 50%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Agora</title>
+    <base href="/MyWebsite/Assessment%203/">
+    <link href="./html/output.css" rel="stylesheet">
+    <style>
+        .profile-info {
+            background-color: #fff;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-image {
+            max-width: 100px;
+            border-radius: 50%;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
-  <header class="bg-blue-500 text-white py-4">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Agora</h1>
+    <header class="bg-blue-500 text-white py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Agora</h1>
 
-      <nav class="flex space-x-4">
-        <a href="/MyWebsite/Assessment%203/index.php/addSaleItem" class="hover:underline">Sell</a>
-        <a href="/MyWebsite/Assessment%203/index.php/listings" class="hover:underline">My Listings</a>
-        <a href="/MyWebsite/Assessment%203/index.php/sellerConnections" class="hover:underline">Connections</a>
-        <a href="/MyWebsite/Assessment%203/index.php/profile" class="hover:underline">Profile</a>
-        <a href="/MyWebsite/Assessment%203/index.php/logout" class="hover:underline">Logout</a>
-      </nav>
-    </div>
-  </header>
+            <nav class="flex space-x-4">
+                <a href="/MyWebsite/Assessment%203/index.php/addSaleItem" class="hover:underline">Sell</a>
+                <a href="/MyWebsite/Assessment%203/index.php/listings" class="hover:underline">My Listings</a>
+                <a href="/MyWebsite/Assessment%203/index.php/sellerConnections" class="hover:underline">Connections</a>
+                <a href="/MyWebsite/Assessment%203/index.php/profile" class="hover:underline">Profile</a>
+                <a href="/MyWebsite/Assessment%203/index.php/logout" class="hover:underline">Logout</a>
+            </nav>
+        </div>
+    </header>
 
-  <main class="container mx-auto mt-8">
-    <h2 class="text-3xl font-bold mb-8 text-center">Profile Information</h2>
+    <main class="container mx-auto mt-8">
+        <h2 class="text-3xl font-bold mb-8 text-center">Profile Information</h2>
 
-    <div class="bg-white shadow-md rounded-lg p-8">
-      <div class="profile-info">
-        <h3 class="text-xl font-semibold mb-4">User Details</h3>
-        <tbody>
-        <!-- Dynamic content rendering based on action -->
-        <?php
+        <div class="bg-white shadow-md rounded-lg p-8">
+            <div class="profile-info">
+                <h3 class="text-xl font-semibold mb-4">User Details</h3>
+                <tbody>
+                    <!-- Dynamic content rendering based on action -->
+                    <?php
           // Fetch action and userID from URL query parameters
           $action = $_GET['action'] ?? null;
           $userID = $_GET['userID'] ?? null;
@@ -56,11 +58,12 @@
               echo $this->renderProfile();
           }
         ?>
-          </tbody>
-      </div>
-    </div>
-    </div>
-  </main>
+                </tbody>
+            </div>
+        </div>
+        </div>
+    </main>
 
 </body>
+
 </html>

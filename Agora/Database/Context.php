@@ -11,7 +11,7 @@ class Context implements IContext
     private $user;    // Current user
 
     // Constructor to initialize the properties
-    public function __construct($db, string $uri, array $config, Session $session) // Make sure to use the Session type
+    public function __construct($db, string $uri, array $config, Session $session)
     {
         $this->db = $db;
         $this->uri = $uri;
@@ -50,7 +50,7 @@ class Context implements IContext
     }
 
     // Method to get the session instance
-    public function getSession(): Session // Add this method
+    public function getSession(): Session
     {
         return $this->session;
     }
@@ -58,7 +58,7 @@ class Context implements IContext
     // Method to create a context from a configuration file
     public function createFromConfigFile($configFile)
     {
-        // Example logic to read from a config file and set properties
+  
         if (file_exists($configFile)) {
             $config = parse_ini_file($configFile);
             

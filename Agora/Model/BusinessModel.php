@@ -2,7 +2,8 @@
 
 namespace Agora\Model;
 
-class BusinessModel {
+class BusinessModel
+{
     private $businessID;
     private $businessName;
     private $legalBusinessDetails;
@@ -10,7 +11,8 @@ class BusinessModel {
     private $additionalLocations;
     private $imagePath;
 
-    public function __construct(int $businessID, string $businessName, string $legalBusinessDetails, string $hqLocation, array $additionalLocations, ?string $imagePath) {
+    public function __construct(int $businessID, string $businessName, string $legalBusinessDetails, string $hqLocation, array $additionalLocations, ?string $imagePath)
+    {
         $this->businessID = $businessID;
         $this->businessName = $businessName;
         $this->legalBusinessDetails = $legalBusinessDetails;
@@ -47,12 +49,6 @@ class BusinessModel {
     public function getAdditionalLocations(): array
     {
         return $this->additionalLocations;
-    }
-
-    // Optional: Add a method to display additional locations in a comma-separated string
-    public function getAdditionalLocationsAsString(): string
-    {
-        return implode(', ', $this->additionalLocations);
     }
 
     // Getter for imagePath
@@ -105,8 +101,8 @@ class BusinessModel {
     // Method to create a new business account
     public function createBusiness(\Agora\Database\Database $db, int $userID): bool
     {
-        $this->additionalLocations = is_array($this->additionalLocations) 
-            ? implode(',', $this->additionalLocations) 
+        $this->additionalLocations = is_array($this->additionalLocations)
+            ? implode(',', $this->additionalLocations)
             : $this->additionalLocations;
 
         $sql = "INSERT INTO Business (BusinessName, LegalBusinessDetails, HQLocation, AdditionalLocations, ImagePath) VALUES (?, ?, ?, ?, ?)";
@@ -128,7 +124,7 @@ class BusinessModel {
 
         $sqlUserBusiness = "INSERT INTO Users_Business (UserID, BusinessID, Role) VALUES (?, ?, ?)";
         $fieldsUserBusiness = [$userID, $businessID, $userRole];
-        
+
         if (!$db->executePrepared($sqlUserBusiness, $fieldsUserBusiness)) {
             error_log("Failed to associate UserID $userID with BusinessID $businessID and Role $userRole");
             return false;
@@ -161,59 +157,56 @@ class BusinessModel {
     }
 
     public function getConnectionsByBusinessID(\Agora\Database\Database $db, int $businessID): array
-{
-    // SQL query to fetch user connections for the specified business ID
-    $sql = "
+    {
+        // SQL query to fetch user connections for the specified business ID
+        $sql = "
         SELECT ub.UserID, ub.Role
         FROM Users_Business ub
         WHERE ub.BusinessID = ?
     ";
 
-    // Prepare and execute the query with businessID as the parameter
-    $params = [$businessID];
-    $result = $db->queryPrepared($sql, $params);
+        // Prepare and execute the query with businessID as the parameter
+        $params = [$businessID];
+        $result = $db->queryPrepared($sql, $params);
 
-    // Check for a valid result
-    if ($result === false) {
-        error_log("Failed to fetch connections for BusinessID: $businessID");
-        return []; // Return an empty array if there was an error
+        // Check for a valid result
+        if ($result === false) {
+            error_log("Failed to fetch connections for BusinessID: $businessID");
+            return []; // Return an empty array if there was an error
+        }
+
+        return $result ? $result : [];
     }
 
-    return $result ? $result : [];
-}
+    public function getBusinessNameByID($database, $businessID)
+    {
+        $sql = "SELECT BusinessName FROM Business WHERE BusinessID = ?";
+        $fields = [$businessID]; // Parameters to bind
 
-public function getBusinessNameByID($database, $businessID)
-{
-    $sql = "SELECT BusinessName FROM Business WHERE BusinessID = ?";
-    $fields = [$businessID]; // Parameters to bind
+        // Use the executePrepared method, which is already handling the binding and execution
+        $result = $database->queryPrepared($sql, $fields);
 
-    // Use the executePrepared method, which is already handling the binding and execution
-    $result = $database->queryPrepared($sql, $fields);
-    
-    return $result ? $result[0]['BusinessName'] : null; // Return the first result or null if not found
-}
-
-public function addConnection(\Agora\Database\Database $db, int $userID, int $businessID, string $role): bool
-{
-    // Check if the user exists in the Users table
-    $sqlCheckUser = "SELECT COUNT(*) FROM Users WHERE UserID = ?";
-    $paramsCheckUser = [$userID];
-    $userExists = $db->queryPrepared($sqlCheckUser, $paramsCheckUser);
-
-
-  
-
-    // SQL query to insert a new connection into the Users_Business table
-    $sql = "INSERT INTO Users_Business (BusinessID, UserID, Role) VALUES (?, ?, ?)";
-    $fields = [$userID, $businessID, $role];
-// In your PHP code where you want the alert
-echo "<script>alert('Executing SQL: $sql with parameters: " . implode(", ", $fields) . "');</script>";
-    // Execute the prepared statement
-    if (!$db->executePrepared($sql, $fields)) {
-        error_log("Failed to add connection: UserID=$userID to BusinessID=$businessID with Role=$role");
-        return false; // Return false on failure
+        return $result ? $result[0]['BusinessName'] : null; // Return the first result or null if not found
     }
 
-    return true; // Return true to indicate success
-}
+    public function addConnection(\Agora\Database\Database $db, int $userID, int $businessID, string $role): bool
+    {
+        // Check if the user exists in the Users table
+        $sqlCheckUser = "SELECT COUNT(*) FROM Users WHERE UserID = ?";
+        $paramsCheckUser = [$userID];
+        $userExists = $db->queryPrepared($sqlCheckUser, $paramsCheckUser);
+
+        // SQL query to insert a new connection into the Users_Business table
+        $sql = "INSERT INTO Users_Business (BusinessID, UserID, Role) VALUES (?, ?, ?)";
+        $fields = [$userID, $businessID, $role];
+        // In your PHP code where you want the alert
+        echo "<script>alert('Executing SQL: $sql with parameters: " . implode(", ", $fields) . "');</script>";
+        // Execute the prepared statement
+        if (!$db->executePrepared($sql, $fields)) {
+            error_log("Failed to add connection: UserID=$userID to BusinessID=$businessID with Role=$role");
+            return false; // Return false on failure
+        }
+
+        return true; // Return true to indicate success
+    }
 }

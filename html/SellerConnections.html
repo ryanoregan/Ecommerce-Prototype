@@ -1,32 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connections - Agora</title>
-  <link href="../html/output.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connections - Agora</title>
+    <link href="../html/output.css" rel="stylesheet">
 </head>
 
 <body class="bg-gray-100">
-  <header class="bg-blue-500 text-white py-4">
-    <div class="container mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-bold">Agora</h1>
-      <nav class="flex space-x-4">
-        <a href="/MyWebsite/Assessment%203/index.php/addSaleItem" class="hover:underline">Sell</a>
-        <a href="/MyWebsite/Assessment%203/index.php/listings" class="hover:underline">My Listings</a>
-        <a href="/MyWebsite/Assessment%203/index.php/sellerConnections" class="hover:underline">Connections</a>
-        <a href="/MyWebsite/Assessment%203/index.php/profile" class="hover:underline">Profile</a>
-        <a href="/MyWebsite/Assessment%203/index.php/logout" class="hover:underline">Logout</a>
-      </nav>
-    </div>
-  </header>
-  <main class="container mx-auto mt-8">
-    <h2 class="text-3xl font-bold mb-8 text-center">Business Connections</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <?php
+    <header class="bg-blue-500 text-white py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Agora</h1>
+            <nav class="flex space-x-4">
+                <a href="/MyWebsite/Assessment%203/index.php/addSaleItem" class="hover:underline">Sell</a>
+                <a href="/MyWebsite/Assessment%203/index.php/listings" class="hover:underline">My Listings</a>
+                <a href="/MyWebsite/Assessment%203/index.php/sellerConnections" class="hover:underline">Connections</a>
+                <a href="/MyWebsite/Assessment%203/index.php/profile" class="hover:underline">Profile</a>
+                <a href="/MyWebsite/Assessment%203/index.php/logout" class="hover:underline">Logout</a>
+            </nav>
+        </div>
+    </header>
+    <main class="container mx-auto mt-8">
+        <h2 class="text-3xl font-bold mb-8 text-center">Business Connections</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <?php
         echo $this->renderConnections();
         ?>
-    </div>
-  </main>
+        </div>
+    </main>
 </body>
+
 </html>

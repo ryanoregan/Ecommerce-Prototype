@@ -47,7 +47,7 @@ class Session implements ISession
     public function changeContext(string $context): void
     {
         $this->context = $context;
-        // Additional logic can be added here to load context-specific data
+      
     }
 
     // Method to clear the entire session
