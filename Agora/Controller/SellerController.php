@@ -88,10 +88,11 @@ class SellerController extends AbstractController
 
                 // Save the item to the database
                 $itemModel->createItem($db);
-
+                
                 // Redirect to the seller dashboard after successful creation
-                header("Location: /MyWebsite/Assessment%203/index.php/dashboard");
+                echo "<script>alert('Item successfully listed!.'); window.location.href = '/MyWebsite/Assessment%203/index.php/dashboard';</script>";
                 exit();
+
             } catch (\Exception $e) {
                 // Handle exceptions during item creation
                 echo 'Error: ' . htmlspecialchars($e->getMessage());

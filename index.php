@@ -37,7 +37,7 @@ use Agora\Database\URI;
 session_start(); // Start the session
 
 // Define the path to the config file
-$configFile = __DIR__ . '/Agora/Database/config.ini';
+$configFile = __DIR__ . '/Agora/config/config.ini';
 
 // Create a new Session instance
 $session = new Session(); 

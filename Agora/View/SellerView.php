@@ -153,21 +153,33 @@ class SellerView extends AbstractView
 
     public function renderConnections()
     {
-
-
-        echo '<table>';
-        echo '<thead><tr><th>Business Name</th><th>Legal Details</th><th>HQ Location</th><th>Additional Locations</th></tr></thead>';
-        echo '<tbody>';
+        // Start the output with a container for styling
+        $output = '<div class="container mx-auto px-4 mt-8">';
+        $output .= '<h2 class="text-2xl font-bold mb-4">Business Connections</h2>';
+        $output .= '<div class="overflow-x-auto shadow-md rounded-lg">'; // Add shadow and rounded corners
+        $output .= '<table class="min-w-full bg-white">'; // Set the background color of the table
+        $output .= '<thead class="bg-gray-200 text-gray-600 uppercase text-sm">'; // Header styling
+        $output .= '<tr>';
+        $output .= '<th class="py-3 px-4 text-left">Business Name</th>';
+        $output .= '<th class="py-3 px-4 text-left">Legal Details</th>';
+        $output .= '<th class="py-3 px-4 text-left">HQ Location</th>';
+        $output .= '<th class="py-3 px-4 text-left">Additional Locations</th>';
+        $output .= '</tr></thead>';
+        $output .= '<tbody class="text-gray-700">'; // Body text color
         foreach ($this->businesses as $business) {
-            echo '<tr>';
-            echo '<td>' . htmlspecialchars($business['BusinessName']) . '</td>';
-            echo '<td>' . htmlspecialchars($business['LegalBusinessDetails']) . '</td>';
-            echo '<td>' . htmlspecialchars($business['HQLocation']) . '</td>';
-            echo '<td>' . htmlspecialchars($business['AdditionalLocations']) . '</td>';
-            echo '</tr>';
+            $output .= '<tr class="border-b hover:bg-gray-100">'; // Row with hover effect
+            $output .= '<td class="py-3 px-4">' . htmlspecialchars($business['BusinessName']) . '</td>';
+            $output .= '<td class="py-3 px-4">' . htmlspecialchars($business['LegalBusinessDetails']) . '</td>';
+            $output .= '<td class="py-3 px-4">' . htmlspecialchars($business['HQLocation']) . '</td>';
+            $output .= '<td class="py-3 px-4">' . htmlspecialchars($business['AdditionalLocations']) . '</td>';
+            $output .= '</tr>';
         }
-        echo '</tbody>';
-        echo '</table>';
+        $output .= '</tbody>';
+        $output .= '</table>';
+        $output .= '</div>'; // Close table wrapper
+        $output .= '</div>'; // Close container
+    
+        echo $output; // Output the entire string
     }
 
 }

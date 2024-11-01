@@ -97,9 +97,6 @@ class UserModel
 
         // Insert into the appropriate role table based on the user's role
         switch ($this->role) {
-            case 'Buyer':
-                $sqlRole = "INSERT INTO Buyers (UserID) VALUES (?)";
-                break;
             case 'Seller':
                 $sqlRole = "INSERT INTO Sellers (UserID, Location) VALUES (?, 'Default Location')";
                 break;
