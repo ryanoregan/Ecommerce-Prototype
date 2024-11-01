@@ -33,4 +33,9 @@ interface IDatabase
 
     // Method to execute a prepared query (INSERT, UPDATE, DELETE) with bound parameters
     public function executePrepared(string $parameterisedSQL, array $fields): bool;
+    
+    public function findUserByUsername(string $username);
+
+    public function getUserRoleByUserID(int $userID): ?string;
 }
+
