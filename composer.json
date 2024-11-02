@@ -1,0 +1,21 @@
+{
+    "name": "ryanoregan/assessment-3",
+    "description": "Agora Ecommerce Site",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ryan O'Regan",
+            "email": "Ryan8489@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Agora\\": "Agora/"
+        }
+    },
+    "require-dev": {
+        "phpstan/phpstan": "2.0.x-dev"
+    }
+}

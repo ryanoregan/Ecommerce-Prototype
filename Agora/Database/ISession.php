@@ -5,7 +5,7 @@ namespace Agora\Database;
 interface ISession
 {
     // Method to get a value from the session by key
-    public function get(string $key);
+    public function get(string $key): mixed;
 
     // Method to set a value in the session by key
     public function set(string $key, $value): void;

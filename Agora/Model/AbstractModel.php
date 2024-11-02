@@ -2,6 +2,8 @@
 
 namespace Agora\Model;
 
+use Agora\Database\IDatabase;
+
 abstract class AbstractModel
 {
     protected $db;

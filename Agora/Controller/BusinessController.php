@@ -104,7 +104,7 @@ class BusinessController extends AbstractController
         }
     }
 
-    public function getBusinessAccounts()
+    public function getBusinessAccounts($action = null, $userID = null)
     {
         // Check if the user is logged in
         $user = $this->context->getUser();
@@ -127,11 +127,6 @@ class BusinessController extends AbstractController
             // Fetch all business accounts for the current user
             $businessModel = new BusinessModel(0, '', '', '', [], ''); // Placeholder constructor to access method
             $businessAccountsData = $businessModel->getBusinessAccountsByUserID($db, $userID); // Fetch business accounts
-
-            // Ensure businessAccountsData is an array
-            if (!is_array($businessAccountsData)) {
-                throw new \Exception("Failed to fetch business accounts.");
-            }
 
             // Convert fetched data into `BusinessModel` objects
             $businessAccounts = [];
@@ -276,7 +271,7 @@ class BusinessController extends AbstractController
                     }
 
                     // Check if userID exists and retrieve role
-                    $userModel = new UserModel(0, '', '', 0.0, 0);
+                    $userModel = new UserModel(0, '', '', '', '');
                     $userRole = $userModel->getRoleByUserID($db, $userID);
 
                     if ($userRole) {

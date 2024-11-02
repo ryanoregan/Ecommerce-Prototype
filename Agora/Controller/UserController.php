@@ -7,7 +7,7 @@ require_once __DIR__ . '/../Model/UserModel.php';
 use Agora\Database\IContext;
 use Agora\Model\UserModel;
 use Agora\View\LoginView;
-use Agora\View\SignUpView;
+use Agora\View\SignupView;
 use Agora\View\BuyerView;
 use Agora\View\SellerView;
 
@@ -74,11 +74,7 @@ class UserController extends AbstractController
                     return; // Stop further execution
                 }
 
-                // If we reach here, login failed
-                $loginView = new LoginView();
-                $loginView->setTemplate('./html/index.html');
-                $loginView->setTemplateField('errorMessage', $errorMessage);
-                echo $loginView->render();
+
             } catch (\Exception $e) {
                 // Handle exceptions, e.g., rendering issues
                 echo 'Error: ' . htmlspecialchars($e->getMessage()); // Display the error message safely
@@ -147,7 +143,7 @@ class UserController extends AbstractController
     public function renderSignUpView($errorMessage = null)
     {
         try {
-            $signUpView = new SignUpView();
+            $signUpView = new SignupView();
             $signUpView->setTemplate('./html/signup.html');
             if ($errorMessage) {
                 $signUpView->setTemplateField('errorMessage', $errorMessage);
@@ -234,7 +230,7 @@ class UserController extends AbstractController
             }
 
             // Fetch all listings for the current user
-            $userModel = new UserModel(0, '', '', 0.0, 0); // Placeholder constructor to access method
+            $userModel = new UserModel(0, '', '', '', ''); // Placeholder constructor to access method
             $profileData = $userModel->getProfilebyUserID($db, $userID); // Fetch items
 
             // Check if profileData is an array and contains data

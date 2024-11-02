@@ -6,7 +6,7 @@ use Agora\Database\IContext;
 
 abstract class AbstractController
 {
-    private $context; // The context instance
+    private IContext $context; // The context instance
 
     // Constructor to initialize the controller with a context
     public function __construct(IContext $context)

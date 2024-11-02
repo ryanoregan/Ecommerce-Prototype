@@ -55,7 +55,7 @@ class BuyerController extends AbstractController
         }
     }
 
-    public function viewItemDetail()
+    public function viewItemDetail($action = null, $itemID = null): void
     {
         $itemID = $_GET['itemID'] ?? null;
 

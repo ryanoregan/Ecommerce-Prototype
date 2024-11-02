@@ -1,26 +1,26 @@
 <?php
-
 namespace Agora\Database;
 
 class Context implements IContext
 {
-    private $db;      // Database instance
-    private $uri;     // URI
-    private $config;  // Configuration settings
-    private $session; // Session data
-    private $user;    // Current user
+    private ?IDatabase $db;       // Specify type for the database instance
+    private string $uri;          // Specify type for the URI
+    private array $config;        // Specify type for the configuration settings
+    private Session $session;     // Specify type for the session data
+    private mixed $user;          // Specify type for the current user, allowing null
 
     // Constructor to initialize the properties
-    public function __construct($db, string $uri, array $config, Session $session)
+    public function __construct(?IDatabase $db, string $uri, array $config, Session $session)
     {
         $this->db = $db;
         $this->uri = $uri;
-        $this->config = $config;
+        $this->config = $config;  // Keep the config as it is for now
         $this->session = $session;
+        $this->user = null; // Initialize user as null
     }
 
     // Method to get the database instance
-    public function getDB()
+    public function getDB(): ?IDatabase
     {
         return $this->db;
     }
@@ -38,7 +38,7 @@ class Context implements IContext
     }
 
     // Method to get the current user
-    public function getUser()
+    public function getUser(): mixed
     {
         return $this->user;
     }
@@ -56,9 +56,8 @@ class Context implements IContext
     }
 
     // Method to create a context from a configuration file
-    public function createFromConfigFile($configFile)
+    public function createFromConfigFile($configFile): void
     {
-  
         if (file_exists($configFile)) {
             $config = parse_ini_file($configFile);
             

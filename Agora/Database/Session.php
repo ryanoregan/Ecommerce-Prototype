@@ -16,7 +16,7 @@ class Session implements ISession
     }
 
     // Method to get a value from the session by key
-    public function get(string $key)
+    public function get(string $key): mixed
     {
         $contextKey = $this->getContextKey($key);
         return $this->isKeySet($key) ? $_SESSION[$contextKey] : null;

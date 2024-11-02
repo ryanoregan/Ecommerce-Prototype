@@ -161,7 +161,7 @@ class SellerController extends AbstractController
         }
     }
 
-    public function getProfile()
+    public function getProfile($action = null, $userID = null)
     {
         // Check if the user is logged in
         $user = $this->context->getUser();
@@ -182,7 +182,7 @@ class SellerController extends AbstractController
             }
 
             // Fetch all listings for the current seller
-            $userModel = new UserModel(0, '', '', 0.0, 0); // Placeholder constructor to access method
+            $userModel = new UserModel(0, '', '', '', ''); // Placeholder constructor to access method
             $profileData = $userModel->getProfilebyUserID($db, $sellerID); // Fetch items
 
             // Check if profileData is an array and contains data
@@ -246,7 +246,7 @@ class SellerController extends AbstractController
                 $newLocation = $_POST['location'] ?? null;
 
                 // Update user details
-                $userModel = new userModel(0, '', '', 0.0, 0);
+                $userModel = new userModel(0, '', '', '', '');
                 if ($newUserName) {
                     $userModel->updateUserName($db, $userID, $newUserName);
                 }

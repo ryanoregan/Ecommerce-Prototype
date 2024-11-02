@@ -98,7 +98,7 @@ class BuyerView extends AbstractView
             // Display item name and price with flexbox layout
             $output .= "<div class='p-4'>";
             $output .= "<h2 class='text-lg font-semibold text-gray-800'>" . htmlspecialchars($item->getItemName() ?? 'No Item Name') . "</h2>"; // Item name
-            $output .= "<p class='text-xl font-bold text-green-600'>" . htmlspecialchars('$' . $item->getPrice() ?? 'No Price') . "</p>"; // Price
+            $output .= "<p class='text-xl font-bold text-green-600'>" . htmlspecialchars('$' . $item->getPrice()) . "</p>"; // Price
             $output .= "<p class='mt-2 text-gray-600 text-sm'>" . htmlspecialchars($item->getDescription() ?? 'No Description') . "</p>"; // Description
     
             // Add a View button that links to the details page

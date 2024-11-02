@@ -18,4 +18,7 @@ interface IContext
 
     // Method to set the current user
     public function setUser($user): void;
+
+    // Method to get the session instance, returning ISession for flexibility
+    public function getSession(): ISession;
 }

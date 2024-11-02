@@ -38,13 +38,7 @@ class URI implements IURI
     {
         return  implode('/', $this->parts);
     }
-
-    // Method to get the remaining parts of the URI
-    public function getRemainingParts(): array
-    {
-        return array_slice($this->parts, 1); // Return all parts except the first one
-    }
-
+    
     // Method to prepend a part to the URI
     public function prependParts(string $part): void
     {

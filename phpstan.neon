@@ -1,0 +1,4 @@
+parameters:
+    level: 5
+    paths:
+        - Agora  # Adjust this path to point to your actual source code directory

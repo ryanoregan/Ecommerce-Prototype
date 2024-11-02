@@ -2,29 +2,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Manually require classes
-require_once './Agora/Database/IContext.php';
-require_once './Agora/Database/Context.php';
-require_once './Agora/Database/IDatabase.php';
-require_once './Agora/Database/Database.php';
-require_once './Agora/Controller/AbstractController.php';
-require_once './Agora/Controller/UserController.php';
-require_once './Agora/Controller/SellerController.php';
-require_once './Agora/Controller/BuyerController.php';
-require_once './Agora/Controller/BusinessController.php';
-require_once './Agora/View/AbstractView.php';
-require_once './Agora/View/LoginView.php';
-require_once './Agora/View/SignUpView.php';
-require_once __DIR__ . '/Agora/View/BuyerView.php';
-require_once __DIR__ . '/Agora/View/SellerView.php';
-require_once __DIR__ . '/Agora/View/BusinessView.php';
-require_once './Agora/Database/ISession.php';
-require_once './Agora/Database/Session.php';
-require_once './Agora/Model/ItemModel.php';
-require_once './Agora/Model/SellerModel.php';
-require_once './Agora/Model/BusinessModel.php';
-require_once './Agora/Database/IURI.php';
-require_once './Agora/Database/URI.php';
+require 'vendor/autoload.php';
 
 use Agora\Database\Context;
 use Agora\Database\Session;
@@ -45,7 +23,7 @@ $session = new Session();
 // Initialize the database context
 try {
     // Create a new Context instance
-    $context = new Context(null, '/MyWebsite/Assessment 3', [], $session); // Pass null for db initially
+    $context = new Context(db: null, uri: '/MyWebsite/Assessment 3', config: [], session: $session); // Pass null for db initially
     $context->createFromConfigFile($configFile); // Load the config and create the DB connection
 } catch (\Exception $e) {
     // Handle the error
@@ -69,17 +47,17 @@ $businessID = $_GET['businessID'] ?? null;
 // Routing logic
 if ($action === 'edit' && $userID !== null) {
     $sellerController = new SellerController($context);
-    $sellerController->getProfile($action, $userID);
+    $sellerController->getProfile(action: $action, userID: $userID);
     exit();
 }
 if ($action === 'viewItem' && $itemID !== null) {
     $buyerController = new BuyerController($context);
-    $buyerController->viewItemDetail($action, $itemID);
+    $buyerController->viewItemDetail(action: $action, itemID: $itemID);
     exit();
 }
 if ($action === 'edit' && $businessID !== null) {
     $businessController = new BusinessController($context);
-    $businessController->getBusinessAccounts($action, $businessID);
+    $businessController->getBusinessAccounts(action: $action, userID: $businessID);
     exit();
 }
 
