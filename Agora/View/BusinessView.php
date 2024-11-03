@@ -56,7 +56,7 @@ class BusinessView extends AbstractView
             $output .= "<div class='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>"; // Grid layout
 
             // Define the base URL for your uploads directory
-            $baseURL = '/MyWebsite/Assessment%203/'; // Adjust this according to your actual directory structure
+            $baseURL = '/MyWebsite/Assessment%203/';
 
             foreach ($this->businessAccounts as $account) {
                 // Access properties using getters

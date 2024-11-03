@@ -2,7 +2,7 @@
 
 namespace Agora\Model;
 
-class BusinessModel
+class BusinessModel extends AbstractModel
 {
     private $businessID;
     private $businessName;
@@ -199,7 +199,7 @@ class BusinessModel
         // SQL query to insert a new connection into the Users_Business table
         $sql = "INSERT INTO Users_Business (BusinessID, UserID, Role) VALUES (?, ?, ?)";
         $fields = [$userID, $businessID, $role];
-        // In your PHP code where you want the alert
+       
         echo "<script>alert('Executing SQL: $sql with parameters: " . implode(", ", $fields) . "');</script>";
         // Execute the prepared statement
         if (!$db->executePrepared($sql, $fields)) {

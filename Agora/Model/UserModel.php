@@ -2,7 +2,7 @@
 
 namespace Agora\Model;
 
-class UserModel
+class UserModel extends AbstractModel
 {
     private int $userID;
     private string $userName;
@@ -81,10 +81,6 @@ class UserModel
 
         // Prepare parameters for binding, including role
         $fields = [$username, $email, $hashedPassword, $this->role];
-
-        // Debugging: Log the SQL and parameters
-        error_log("Executing SQL: $sql");
-        error_log("Parameters: username=$username, email=$email, password=******, role=user");
 
         // Execute the prepared statement
         if (!$db->executePrepared($sql, $fields)) {
@@ -240,9 +236,6 @@ class UserModel
         $sql = "SELECT COUNT(*) AS count FROM Users WHERE UserName = ?";
         $fields = [$username];
 
-        // Log the SQL query and parameters for debugging
-        error_log("Executing query: " . $sql . " with parameters: " . json_encode($fields));
-
         // Execute the prepared statement
         $result = $db->queryPrepared($sql, $fields);
 
@@ -255,4 +248,5 @@ class UserModel
         // Return true if count is greater than 0, indicating the username exists
         return $result[0]['count'] > 0;
     }
+    
 }

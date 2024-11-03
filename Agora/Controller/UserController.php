@@ -59,6 +59,10 @@ class UserController extends AbstractController
                     // Verify the password using the raw password from the POST data
                     if (password_verify($password, $userData['Password'])) { // Compare with the hashed password
                         // Login successful
+
+                        // Regenerate the session ID to prevent session fixation attacks
+                        session_regenerate_id(delete_old_session: true);
+
                         $this->context->setUser($userModel); // Store user in Context
                         $this->context->getSession()->set('loggedInUser', $userModel); // Store user in session
                         header("Location: ./index.php/dashboard");
@@ -126,6 +130,54 @@ class UserController extends AbstractController
                 $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
                 $userModel = new UserModel(0, $username, $email, '', $role, false); // Password will be set later
                 $userModel->createUser($db, $username, $email, $hashedPassword);
+
+                // Show alert for successful signup
+                echo "<script>alert('User registered successfully! Please log in.'); window.location.href = '/MyWebsite/Assessment%203/index.php';</script>";
+                exit();
+            } catch (\Exception $e) {
+                // Handle exceptions during user creation
+                $this->renderSignUpView('Error: ' . htmlspecialchars($e->getMessage()));
+            }
+        } else {
+            // If not a POST request, show the signup form
+            $this->renderSignUpView();
+        }
+    }
+    
+        public function insecureHandleSignUp()
+    {
+        // Check if form is submitted
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $username = $_POST['username'] ?? '';
+            $email = $_POST['email'] ?? '';
+            $password = $_POST['password'] ?? '';
+            $confirmPassword = $_POST['confirm_password'] ?? '';
+            $role = $_POST['role'] ?? 'Buyer'; // Default role if not provided
+
+            if ($password !== $confirmPassword) {
+                echo "<script>alert('Passwords do not match.'); window.history.back();</script>";
+                return;
+            }
+
+            try {
+                // Access the database through Context
+                $db = $this->context->getDB();
+                if (!$db->isConnected()) {
+                    error_log("Database connection is not established.");
+                    return false;
+                }
+
+                // Check if the username already exists
+                $userModel = new UserModel(0, '', '', '', '', false); // Temporary instance to access methods
+                if ($userModel->usernameExists($db, $username)) {
+                    echo "<script>alert('Username already exists. Please choose a different one.'); window.history.back();</script>";
+                    return;
+                }
+
+                // Proceed with user creation if username is unique
+                // Directly storing plaintext password - Insecure
+                $userModel = new UserModel(0, $username, $email, $password, $role, false); // Storing plaintext password
+                $userModel->createUser($db, $username, $email, $password); // Passing plaintext password to database
 
                 // Show alert for successful signup
                 echo "<script>alert('User registered successfully! Please log in.'); window.location.href = '/MyWebsite/Assessment%203/index.php';</script>";
@@ -229,7 +281,7 @@ class UserController extends AbstractController
                 return false;
             }
 
-            // Fetch all listings for the current user
+            // Fetch all profile details for the current user
             $userModel = new UserModel(0, '', '', '', ''); // Placeholder constructor to access method
             $profileData = $userModel->getProfilebyUserID($db, $userID); // Fetch items
 

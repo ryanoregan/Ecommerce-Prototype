@@ -2,7 +2,7 @@
 
 namespace Agora\Model;
 
-class ItemModel
+class ItemModel extends AbstractModel
 {
     private int $itemID;
     private string $itemName;

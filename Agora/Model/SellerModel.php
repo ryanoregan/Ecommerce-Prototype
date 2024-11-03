@@ -2,7 +2,7 @@
 
 namespace Agora\Model;
 
-class SellerModel
+class SellerModel extends AbstractModel
 {
     private string $location;
 

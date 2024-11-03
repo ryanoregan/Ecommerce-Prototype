@@ -2,7 +2,7 @@
 
 namespace Agora\Model;
 
-class BuyerModel
+class BuyerModel extends AbstractModel
 {
 
     // Method to search for items by name or category

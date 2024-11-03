@@ -165,6 +165,25 @@ class Database implements IDatabase
         return $result->fetch_assoc(); // Return user data as an associative array
     }
 
+            public function insecureFindUserByUsername(string $username)
+        {
+            // Insecure SQL query by directly interpolating the username into the SQL statement
+            $sql = "SELECT UserID, UserName, Email, Password, Role FROM Users WHERE UserName = '$username' LIMIT 1";
+
+            // Execute the query directly
+            $result = $this->conn->query($sql);
+
+            // Check if the query execution was successful
+            if ($result === false) {
+                $this->sqlError("Query execution failed");
+                return null; // Return null if execution fails
+            }
+
+            // Fetch the result as an associative array
+            return $result->fetch_assoc(); // Return user data as an associative array
+        }
+
+
     // Private method to handle SQL errors
     private function sqlError($source): void
     {
